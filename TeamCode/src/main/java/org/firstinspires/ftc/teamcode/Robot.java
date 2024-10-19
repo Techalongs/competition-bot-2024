@@ -15,6 +15,8 @@ public class Robot implements MecanumDrivetrain {
     private final DcMotor frontRight;
     private final DcMotor backLeft;
     private final DcMotor backRight;
+    private final DcMotor armHinge; // 0
+    private final DcMotor extension;
     private final Telemetry telemetry;
     private final LinearOpMode opMode;
     private final HashMap<String, String> extraData = new HashMap<>();
@@ -25,6 +27,8 @@ public class Robot implements MecanumDrivetrain {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
+        armHinge = hardwareMap.get(DcMotor.class, "armHinge");
+        extension = hardwareMap.get(DcMotor.class, "extension");
 
         this.telemetry = telemetry;
         this.opMode = opMode;
@@ -45,17 +49,22 @@ public class Robot implements MecanumDrivetrain {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armHinge.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        armHinge.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -132,6 +141,14 @@ public class Robot implements MecanumDrivetrain {
         strafeLeft(-ticks);
     }
 
+    public void hingeArm(double power) {
+        armHinge.setPower(power);
+    }
+
+    public void moveExtension(double power) {
+        extension.setPower(power);
+    }
+
     public double getFLMotorPower() {
         return frontLeft.getPower();
     }
@@ -164,6 +181,22 @@ public class Robot implements MecanumDrivetrain {
         return backRight.getCurrentPosition();
     }
 
+    public double getArmHingePower() {
+        return armHinge.getPower();
+    }
+
+    public double getExtensionPower() {
+        return extension.getPower();
+    }
+
+    public double getArmHingePosition() {
+        return armHinge.getCurrentPosition();
+    }
+
+    public double getExtensionPosition() {
+        return extension.getCurrentPosition();
+    }
+
     public void addData(String caption, double value) {
         addData(caption, String.valueOf(value));
     }
@@ -186,6 +219,10 @@ public class Robot implements MecanumDrivetrain {
         telemetry.addData("Front Right Position", getFRMotorPosition());
         telemetry.addData("Back Left Position", getBLMotorPosition());
         telemetry.addData("Back Right Position", getBRMotorPosition());
+        telemetry.addData("Arm Hinge Power", getArmHingePower());
+        telemetry.addData("Extension Power", getExtensionPower());
+        telemetry.addData("Arm Hinge Position", getArmHingePosition());
+        telemetry.addData("Extension Position", getExtensionPosition());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));
