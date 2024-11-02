@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -17,6 +18,9 @@ public class Robot implements MecanumDrivetrain {
     private final DcMotor backRight;
     private final DcMotor armHinge;
     private final DcMotor extension;
+    private final Servo rightClaw;
+    private final Servo leftClaw;
+    private final Servo clawHinge;
     private final Telemetry telemetry;
     private final LinearOpMode opMode;
     private final HashMap<String, String> extraData = new HashMap<>();
@@ -29,6 +33,9 @@ public class Robot implements MecanumDrivetrain {
         backRight = hardwareMap.get(DcMotor.class, "CH2");
         armHinge = hardwareMap.get(DcMotor.class, "armHinge");
         extension = hardwareMap.get(DcMotor.class, "extension");
+        rightClaw = hardwareMap.get(Servo.class, "rightClaw");
+        leftClaw = hardwareMap.get(Servo.class, "leftClaw");
+        clawHinge = hardwareMap.get(Servo.class, "clawHinge");
 
         this.telemetry = telemetry;
         this.opMode = opMode;
@@ -44,6 +51,7 @@ public class Robot implements MecanumDrivetrain {
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftClaw.setDirection(Servo.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -145,8 +153,49 @@ public class Robot implements MecanumDrivetrain {
         armHinge.setPower(power);
     }
 
+    public void hingeArm(int ticks) {
+        armHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armHinge.setTargetPosition(ticks);
+
+        armHinge.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armHinge.setPower(speed);
+
+        while (armHinge.isBusy() && opMode.opModeIsActive()) {
+            displayData();
+        }
+
+        stopHinge();
+    }
+
+    public void stayHinge(int stayPosition) {
+        if (getArmHingePosition() < stayPosition) armHinge.setPower(0.2);
+        else armHinge.setPower(0.01);
+    }
+
+    public void stopHinge() {
+        armHinge.setPower(0);
+    }
+
     public void moveExtension(double power) {
         extension.setPower(power);
+    }
+
+    public void openClaws() {
+        rightClaw.setPosition(1);
+        leftClaw.setPosition(1);
+    }
+
+    public void closeClaws() {
+        rightClaw.setPosition(0);
+        leftClaw.setPosition(0);
+    }
+
+    public void clawHingeUp() {
+        clawHinge.setPosition(0);
+    }
+
+    public void clawHingeDown() {
+        clawHinge.setPosition(1);
     }
 
     public double getFLMotorPower() {
@@ -165,19 +214,19 @@ public class Robot implements MecanumDrivetrain {
         return backRight.getPower();
     }
 
-    public double getFLMotorPosition() {
+    public int getFLMotorPosition() {
         return frontLeft.getCurrentPosition();
     }
 
-    public double getFRMotorPosition() {
+    public int getFRMotorPosition() {
         return frontRight.getCurrentPosition();
     }
 
-    public double getBLMotorPosition() {
+    public int getBLMotorPosition() {
         return backLeft.getCurrentPosition();
     }
 
-    public double getBRMotorPosition() {
+    public int getBRMotorPosition() {
         return backRight.getCurrentPosition();
     }
 
@@ -189,12 +238,24 @@ public class Robot implements MecanumDrivetrain {
         return extension.getPower();
     }
 
-    public double getArmHingePosition() {
+    public int getArmHingePosition() {
         return armHinge.getCurrentPosition();
     }
 
-    public double getExtensionPosition() {
+    public int getExtensionPosition() {
         return extension.getCurrentPosition();
+    }
+
+    public double getLeftClawPosition() {
+        return leftClaw.getPosition();
+    }
+
+    public double getRightClawPosition() {
+        return rightClaw.getPosition();
+    }
+
+    public double getClawHingePosition() {
+        return clawHinge.getPosition();
     }
 
     public void addData(String caption, double value) {
@@ -223,6 +284,9 @@ public class Robot implements MecanumDrivetrain {
         telemetry.addData("Extension Power", getExtensionPower());
         telemetry.addData("Arm Hinge Position", getArmHingePosition());
         telemetry.addData("Extension Position", getExtensionPosition());
+        telemetry.addData("Left Claw Position", getLeftClawPosition());
+        telemetry.addData("Right Claw Position", getRightClawPosition());
+        telemetry.addData("Claw Hinge Position", getClawHingePosition());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));
