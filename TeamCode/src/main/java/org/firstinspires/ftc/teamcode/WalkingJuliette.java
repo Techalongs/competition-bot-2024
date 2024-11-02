@@ -27,10 +27,6 @@ public class WalkingJuliette extends LinearOpMode {
                 juliette.hingeArm(-gamepad2.left_stick_y * 0.6);
                 juliette.moveExtension(-gamepad2.right_stick_y * 0.6);
 
-                if (gamepad2.dpad_right) juliette.takeIn();
-                else if (gamepad2.dpad_left) juliette.spitOut();
-                else juliette.stopIntake();
-
                 juliette.displayData();
             }
         }
