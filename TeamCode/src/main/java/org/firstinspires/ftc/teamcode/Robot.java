@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -15,20 +17,24 @@ public class Robot implements MecanumDrivetrain {
     private final DcMotor frontRight;
     private final DcMotor backLeft;
     private final DcMotor backRight;
-    private final DcMotor armHinge; // 0
+    private final DcMotor armHinge;
     private final DcMotor extension;
+    private final CRServo intake;
+    private final ColorSensor intakeColor;
     private final Telemetry telemetry;
     private final LinearOpMode opMode;
     private final HashMap<String, String> extraData = new HashMap<>();
     private double speed;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
+        frontLeft = hardwareMap.get(DcMotor.class, "CH1");
+        frontRight = hardwareMap.get(DcMotor.class, "CH0");
+        backLeft = hardwareMap.get(DcMotor.class, "CH3");
+        backRight = hardwareMap.get(DcMotor.class, "CH2");
         armHinge = hardwareMap.get(DcMotor.class, "armHinge");
         extension = hardwareMap.get(DcMotor.class, "extension");
+        intake = hardwareMap.get(CRServo.class, "intake");
+        intakeColor = hardwareMap.get(ColorSensor.class, "intakeColor");
 
         this.telemetry = telemetry;
         this.opMode = opMode;
@@ -41,7 +47,7 @@ public class Robot implements MecanumDrivetrain {
     }
 
     public void init() {
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -149,6 +155,18 @@ public class Robot implements MecanumDrivetrain {
         extension.setPower(power);
     }
 
+    public void takeIn() {
+        intake.setPower(1);
+    }
+
+    public void spitOut() {
+        intake.setPower(-1);
+    }
+
+    public void stopIntake() {
+        intake.setPower(0);
+    }
+
     public double getFLMotorPower() {
         return frontLeft.getPower();
     }
@@ -197,6 +215,22 @@ public class Robot implements MecanumDrivetrain {
         return extension.getCurrentPosition();
     }
 
+    public double getIntakePower() {
+        return intake.getPower();
+    }
+
+    public double getRedIntakeColor() {
+        return intakeColor.red();
+    }
+
+    public double getGreenIntakeColor() {
+        return intakeColor.green();
+    }
+
+    public double getBlueIntakeColor() {
+        return intakeColor.blue();
+    }
+
     public void addData(String caption, double value) {
         addData(caption, String.valueOf(value));
     }
@@ -223,6 +257,10 @@ public class Robot implements MecanumDrivetrain {
         telemetry.addData("Extension Power", getExtensionPower());
         telemetry.addData("Arm Hinge Position", getArmHingePosition());
         telemetry.addData("Extension Position", getExtensionPosition());
+        telemetry.addData("Intake Power", getIntakePower());
+        telemetry.addData("Intake Color Sensor (Red)", getRedIntakeColor());
+        telemetry.addData("Intake Color Sensor (Green)", getGreenIntakeColor());
+        telemetry.addData("Intake Color Sensor (Blue)", getBlueIntakeColor());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));
