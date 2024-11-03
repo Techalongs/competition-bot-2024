@@ -180,6 +180,24 @@ public class Robot implements MecanumDrivetrain {
         extension.setPower(power);
     }
 
+    public void extendExtension(int ticks) {
+        extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extension.setTargetPosition(ticks);
+
+        extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        extension.setPower(speed);
+
+        while (extension.isBusy() && opMode.opModeIsActive()) {
+            displayData();
+        }
+
+        extension.setPower(0);
+    }
+
+    public void retractExtension(int ticks) {
+        extendExtension(-ticks);
+    }
+
     public void openClaws() {
         rightClaw.setPosition(1);
         leftClaw.setPosition(1);
