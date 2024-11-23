@@ -18,8 +18,7 @@ public class Robot implements MecanumDrivetrain {
     private final DcMotor backRight;
     private final DcMotor armHinge;
     private final DcMotor extension;
-    private final Servo rightClaw;
-    private final Servo leftClaw;
+    private final Servo clawServo;
     private final Servo clawHinge;
     private final Telemetry telemetry;
     private final LinearOpMode opMode;
@@ -33,8 +32,7 @@ public class Robot implements MecanumDrivetrain {
         backRight = hardwareMap.get(DcMotor.class, "CH2");
         armHinge = hardwareMap.get(DcMotor.class, "armHinge");
         extension = hardwareMap.get(DcMotor.class, "extension");
-        rightClaw = hardwareMap.get(Servo.class, "rightClaw");
-        leftClaw = hardwareMap.get(Servo.class, "leftClaw");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHinge = hardwareMap.get(Servo.class, "clawHinge");
 
         this.telemetry = telemetry;
@@ -51,7 +49,6 @@ public class Robot implements MecanumDrivetrain {
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftClaw.setDirection(Servo.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -199,13 +196,11 @@ public class Robot implements MecanumDrivetrain {
     }
 
     public void openClaws() {
-        rightClaw.setPosition(1);
-        leftClaw.setPosition(1);
+        clawServo.setPosition(1);
     }
 
     public void closeClaws() {
-        rightClaw.setPosition(0);
-        leftClaw.setPosition(0);
+        clawServo.setPosition(0);
     }
 
     public void clawHingeUp() {
@@ -264,12 +259,8 @@ public class Robot implements MecanumDrivetrain {
         return extension.getCurrentPosition();
     }
 
-    public double getLeftClawPosition() {
-        return leftClaw.getPosition();
-    }
-
-    public double getRightClawPosition() {
-        return rightClaw.getPosition();
+    public double getClawPosition() {
+        return clawServo.getPosition();
     }
 
     public double getClawHingePosition() {
@@ -302,8 +293,7 @@ public class Robot implements MecanumDrivetrain {
         telemetry.addData("Extension Power", getExtensionPower());
         telemetry.addData("Arm Hinge Position", getArmHingePosition());
         telemetry.addData("Extension Position", getExtensionPosition());
-        telemetry.addData("Left Claw Position", getLeftClawPosition());
-        telemetry.addData("Right Claw Position", getRightClawPosition());
+        telemetry.addData("Left Claw Position", getClawPosition());
         telemetry.addData("Claw Hinge Position", getClawHingePosition());
 
         for (String caption : extraData.keySet()) {
