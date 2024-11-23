@@ -27,8 +27,8 @@ public class WalkingJuliette extends LinearOpMode {
 
                 // Arm Controls
                 //juliette.hingeArm(-gamepad2.left_stick_y * 0.6);
-                if (gamepad2.left_stick_y == 0 && juliette.getArmHingePosition() != stayPosition && juliette.getArmHingePosition() < 200) {
-                    if (stayPosition == 0) stayPosition = juliette.getArmHingePosition();
+                if (gamepad2.left_stick_y == 0 && juliette.getExtensionHingePosition() != stayPosition && juliette.getExtensionHingePosition() < 200) {
+                    if (stayPosition == 0) stayPosition = juliette.getExtensionPosition();
                     juliette.stayHinge(stayPosition);
                 } else if (gamepad2.left_stick_y == 0) {
                     juliette.stopHinge();

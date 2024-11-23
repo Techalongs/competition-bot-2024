@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -20,21 +21,28 @@ public class Robot implements MecanumDrivetrain {
     private final DcMotor extension;
     private final Servo clawServo;
     private final Servo clawHinge;
+    private final TouchSensor hingeTopLimit;
+    private final TouchSensor hingeBottomLimit;
+    private final TouchSensor extensionTopLimit;
+    private final TouchSensor extensionBottomLimit;
     private final Telemetry telemetry;
     private final LinearOpMode opMode;
     private final HashMap<String, String> extraData = new HashMap<>();
     private double speed;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
-        frontLeft = hardwareMap.get(DcMotor.class, "CH1");
-        frontRight = hardwareMap.get(DcMotor.class, "CH0");
-        backLeft = hardwareMap.get(DcMotor.class, "CH3");
-        backRight = hardwareMap.get(DcMotor.class, "CH2");
+        frontLeft = hardwareMap.get(DcMotor.class, "CH2");
+        frontRight = hardwareMap.get(DcMotor.class, "CH3");
+        backLeft = hardwareMap.get(DcMotor.class, "CH0");
+        backRight = hardwareMap.get(DcMotor.class, "CH1");
         extensionHinge = hardwareMap.get(DcMotor.class, "armHinge");
         extension = hardwareMap.get(DcMotor.class, "extension");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHinge = hardwareMap.get(Servo.class, "clawHinge");
-
+        hingeTopLimit = hardwareMap.get(TouchSensor.class, "hingeTopLimit");
+        hingeBottomLimit = hardwareMap.get(TouchSensor.class, "hingeBottomLimit");
+        extensionTopLimit = hardwareMap.get(TouchSensor.class, "extensionTopLimit");
+        extensionBottomLimit = hardwareMap.get(TouchSensor.class, "extensionBottomLimit");
         this.telemetry = telemetry;
         this.opMode = opMode;
         this.speed = 0.5;
@@ -46,8 +54,6 @@ public class Robot implements MecanumDrivetrain {
     }
 
     public void init() {
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         clawServo.setDirection(Servo.Direction.REVERSE);
 
@@ -65,10 +71,10 @@ public class Robot implements MecanumDrivetrain {
         extensionHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extensionHinge.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -148,7 +154,13 @@ public class Robot implements MecanumDrivetrain {
     }
 
     public void hingeArm(double power) {
-        extensionHinge.setPower(power);
+        if (power < 0 && !hingeBottomLimit.isPressed()) {
+            extensionHinge.setPower(power);
+        } else if (power > 0 && !hingeTopLimit.isPressed()) {
+            extensionHinge.setPower(power);
+        } else {
+            extensionHinge.setPower(0);
+        }
     }
 
     public void hingeArm(int ticks) {
@@ -175,7 +187,13 @@ public class Robot implements MecanumDrivetrain {
     }
 
     public void moveExtension(double power) {
-        extension.setPower(power);
+        if (power < 0 && !extensionBottomLimit.isPressed()) {
+            extension.setPower(power);
+        } else if (power > 0 && !extensionTopLimit.isPressed()) {
+            extension.setPower(power);
+        } else {
+            extension.setPower(0);
+        }
     }
 
     public void extendExtension(int ticks) {
@@ -268,6 +286,22 @@ public class Robot implements MecanumDrivetrain {
         return clawHinge.getPosition();
     }
 
+    public boolean isHingeTopLimitPressed() {
+        return hingeTopLimit.isPressed();
+    }
+
+    public boolean isHingeBottomLimitPressed() {
+        return hingeBottomLimit.isPressed();
+    }
+
+    public boolean isExtensionTopLimitPressed() {
+        return extensionTopLimit.isPressed();
+    }
+
+    public boolean isExtensionBottomLimitPressed() {
+        return extensionBottomLimit.isPressed();
+    }
+
     public void addData(String caption, double value) {
         addData(caption, String.valueOf(value));
     }
@@ -296,6 +330,10 @@ public class Robot implements MecanumDrivetrain {
         telemetry.addData("Extension Position", getExtensionPosition());
         telemetry.addData("Left Claw Position", getClawPosition());
         telemetry.addData("Claw Hinge Position", getClawHingePosition());
+        telemetry.addData("Top Hinge Limit", isHingeTopLimitPressed());
+        telemetry.addData("Bottom Hinge Limit", isHingeBottomLimitPressed());
+        telemetry.addData("Top Extension Limit", isExtensionTopLimitPressed());
+        telemetry.addData("Bottom Extension Limit", isExtensionBottomLimitPressed());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));
