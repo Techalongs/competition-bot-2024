@@ -178,8 +178,9 @@ public class Robot implements MecanumDrivetrain {
     }
 
     public void stayHinge(int stayPosition) {
-        if (getExtensionHingePosition() < stayPosition) extensionHinge.setPower(0.2);
-        else extensionHinge.setPower(0.01);
+        if (getExtensionHingePosition() < stayPosition && !extensionBottomLimit.isPressed()) extensionHinge.setPower(-0.01);
+        else if (!extensionTopLimit.isPressed()) extensionHinge.setPower(0.01);
+        else extensionHinge.setPower(0);
     }
 
     public void stopHinge() {
