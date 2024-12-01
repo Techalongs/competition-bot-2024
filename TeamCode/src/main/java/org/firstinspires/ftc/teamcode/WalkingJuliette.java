@@ -20,28 +20,28 @@ public class WalkingJuliette extends LinearOpMode {
                 // Drivetrain controls
                 double y = 0;
 
-                if (gamepad1.right_bumper) juliette.drive(0.5, gamepad1, y); // Standard - 0.84
-                else if (gamepad1.left_bumper) juliette.drive(0.2, gamepad1, y); // Standard - 0.4
-                else juliette.drive(0.4, gamepad1, y);
+                if (gamepad1.right_bumper) juliette.drive(0.8, gamepad1, y); // Standard - 0.84
+                else if (gamepad1.left_bumper) juliette.drive(0.4, gamepad1, y); // Standard - 0.4
+                else juliette.drive(0.6, gamepad1, y);
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
                 // Arm Controls
-                //juliette.hingeArm(-gamepad2.left_stick_y * 0.6);
-                if (gamepad2.left_stick_y == 0 && juliette.getExtensionHingePosition() != stayPosition && juliette.getExtensionHingePosition() < 200) {
-                    if (stayPosition == 0) stayPosition = juliette.getExtensionPosition();
-                    juliette.stayHinge(stayPosition);
-                } else if (gamepad2.left_stick_y == 0) {
-                    juliette.stopHinge();
-                } else {
-                    stayPosition = 0;
-
-                    double armPower = -gamepad2.left_stick_y;
-                    if (armPower > 0) juliette.hingeArm(armPower * 0.6);
-                    else juliette.hingeArm(armPower);
-                }
+                juliette.hingeArm(-gamepad2.right_stick_y);
+//                if (gamepad2.left_stick_y == 0 && juliette.getExtensionHingePosition() != stayPosition && juliette.getExtensionHingePosition() < 200) {
+//                    if (stayPosition == 0) stayPosition = juliette.getExtensionPosition();
+//                    juliette.stayHinge(stayPosition);
+//                } else if (gamepad2.left_stick_y == 0) {
+//                    juliette.stopHinge();
+//                } else {
+//                    stayPosition = 0;
+//
+//                    double armPower = -gamepad2.left_stick_y;
+//                    if (armPower > 0) juliette.hingeArm(armPower * 0.6);
+//                    else juliette.hingeArm(armPower);
+//                }
 
                 // Extension Controls
-                juliette.moveExtension(-gamepad2.right_stick_y * 0.6);
+                juliette.moveExtension(-gamepad2.left_stick_y);
 
                 // Claw Hinge Controls
                 if (gamepad2.left_bumper) juliette.clawHingeUp();
