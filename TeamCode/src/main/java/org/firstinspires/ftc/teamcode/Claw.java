@@ -14,6 +14,8 @@ public class Claw {
     public Claw(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHinge = hardwareMap.get(Servo.class, "clawHinge");
+
+        clawServo.setDirection(Servo.Direction.REVERSE);
     }
 
     public Action openClaw() {
