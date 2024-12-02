@@ -35,7 +35,7 @@ public class MecanumDrivetrain {
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void drive(double limiter, Gamepad gamepad, double y) {
+    public void drive(double limiter, Gamepad gamepad) {
         float FLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) + gamepad.left_stick_x;
         float FRPower = (-gamepad.left_stick_y - gamepad.right_stick_x) - gamepad.left_stick_x;
         float BLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) - gamepad.left_stick_x;

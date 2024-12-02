@@ -13,16 +13,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.HashMap;
 
 public class Robot extends MecanumDrivetrain {
-    private final Motor extensionHinge;
-    private final Motor extension;
+    private final DcMotor extensionHinge;
+    private final DcMotor extension;
     private final DcMotor leftHookHinge;
     private final DcMotor rightHookHinge;
     private final Servo clawServo;
     private final Servo clawHinge;
     private final TouchSensor hingeTopLimit;
-    private final TouchSensor hingeBottomLimit;
-    private final TouchSensor extensionTopLimit;
-    private final TouchSensor extensionBottomLimit;
     private final Telemetry telemetry;
     private final LinearOpMode opMode;
     private final HashMap<String, String> extraData = new HashMap<>();
@@ -31,16 +28,13 @@ public class Robot extends MecanumDrivetrain {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
         super(hardwareMap);
 
-        extensionHinge = hardwareMap.get(Motor.class, "armHinge");
-        extension = hardwareMap.get(Motor.class, "extension");
+        extensionHinge = hardwareMap.get(DcMotor.class, "armHinge");
+        extension = hardwareMap.get(DcMotor.class, "extension");
         leftHookHinge = hardwareMap.get(DcMotor.class, "leftHookHinge");
         rightHookHinge = hardwareMap.get(DcMotor.class, "rightHookHinge");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHinge = hardwareMap.get(Servo.class, "clawHinge");
         hingeTopLimit = hardwareMap.get(TouchSensor.class, "hingeTopLimit");
-        hingeBottomLimit = hardwareMap.get(TouchSensor.class, "hingeBottomLimit");
-        extensionTopLimit = hardwareMap.get(TouchSensor.class, "extensionTopLimit");
-        extensionBottomLimit = hardwareMap.get(TouchSensor.class, "extensionBottomLimit");
         this.telemetry = telemetry;
         this.opMode = opMode;
         this.speed = 0.5;
@@ -54,13 +48,14 @@ public class Robot extends MecanumDrivetrain {
     public void init() {
         clawServo.setDirection(Servo.Direction.REVERSE);
 
-        extensionHinge.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        extension.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        extensionHinge.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftHookHinge.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightHookHinge.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        extensionHinge.setRunMode(Motor.RunMode.RawPower);
-        extension.setRunMode(Motor.RunMode.RawPower);
+        extensionHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -230,18 +225,6 @@ public class Robot extends MecanumDrivetrain {
         return hingeTopLimit.isPressed();
     }
 
-    public boolean isHingeBottomLimitPressed() {
-        return hingeBottomLimit.isPressed();
-    }
-
-    public boolean isExtensionTopLimitPressed() {
-        return extensionTopLimit.isPressed();
-    }
-
-    public boolean isExtensionBottomLimitPressed() {
-        return extensionBottomLimit.isPressed();
-    }
-
     public void addData(String caption, double value) {
         addData(caption, String.valueOf(value));
     }
@@ -273,9 +256,6 @@ public class Robot extends MecanumDrivetrain {
         telemetry.addData("Claw Position", getClawPosition());
         telemetry.addData("Claw Hinge Position", getClawHingePosition());
         telemetry.addData("Top Hinge Limit", isHingeTopLimitPressed());
-        telemetry.addData("Bottom Hinge Limit", isHingeBottomLimitPressed());
-        telemetry.addData("Top Extension Limit", isExtensionTopLimitPressed());
-        telemetry.addData("Bottom Extension Limit", isExtensionBottomLimitPressed());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));
