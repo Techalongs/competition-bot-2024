@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -59,6 +57,10 @@ public class Robot extends MecanumDrivetrain {
         leftHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+    }
+
+    public void hingeArm(double power) {
+        extensionHinge.setPower(power);
     }
 
 //    public void hingeArm(double power) {

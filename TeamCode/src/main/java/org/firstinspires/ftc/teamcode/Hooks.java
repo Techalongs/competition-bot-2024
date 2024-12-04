@@ -15,7 +15,7 @@ public class Hooks {
     private final PIDFController leftHookPID;
     private final PIDFController rightHookPID;
 
-    enum HookPosition {
+    public enum HookPosition {
         STARTING,
         READY,
         HOOK
@@ -38,33 +38,47 @@ public class Hooks {
         rightHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void hooksPIDControl(HookPosition pos) {
-        int target1 = 5;
-        int target2 = 5;
-        switch (pos) {
-            case STARTING:
-                target1 = 0;
-                target2 = 0;
-                break;
-            case READY:
-                target1 = -330;
-                target2 = -315;
-                break;
-            case HOOK:
-                target1 = -180;
-                target2 = -160;
-                break;
-        }
+    public Action hooksPIDControl(HookPosition pos) {
+        return new Action() {
+            boolean init = false;
 
-        leftHookPID.setSetPoint(target1);
-        rightHookPID.setSetPoint(target2);
-        while (!leftHookPID.atSetPoint() && !rightHookPID.atSetPoint()) {
-            double output1 = leftHookPID.calculate(leftHook.getCurrentPosition(), leftHookPID.getSetPoint());
-            double output2 = rightHookPID.calculate(rightHook.getCurrentPosition(), rightHookPID.getSetPoint());
-            leftHook.setVelocity(output1);
-            rightHook.setVelocity(output2);
-        }
-        leftHook.setVelocity(0);
-        rightHook.setVelocity(0);
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!init) {
+                    int target1 = 5;
+                    int target2 = 5;
+                    switch (pos) {
+                        case STARTING:
+                            target1 = 0;
+                            target2 = 0;
+                            break;
+                        case READY:
+                            target1 = -400;
+                            target2 = 130;
+                            break;
+                        case HOOK:
+                            target1 = -165;
+                            target2 = 300;
+                            break;
+                    }
+
+                    leftHookPID.setSetPoint(target1);
+                    rightHookPID.setSetPoint(target2);
+                    init = true;
+                }
+
+                if (!leftHookPID.atSetPoint() && !rightHookPID.atSetPoint()) {
+                    double output1 = leftHookPID.calculate(leftHook.getCurrentPosition(), leftHookPID.getSetPoint());
+                    double output2 = rightHookPID.calculate(rightHook.getCurrentPosition(), rightHookPID.getSetPoint());
+                    leftHook.setVelocity(output1);
+                    rightHook.setVelocity(output2);
+                    return true;
+                }
+
+                leftHook.setVelocity(0);
+                rightHook.setVelocity(0);
+                return false;
+            }
+        };
     }
 }

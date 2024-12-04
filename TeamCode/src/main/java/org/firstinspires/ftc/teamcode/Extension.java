@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -30,7 +29,7 @@ public class Extension {
     }
 
     public Extension(HardwareMap hardwareMap) {
-        hingePID = new PIDFController(10, 0.1, 0.1, 0);
+        hingePID = new PIDFController(5, 0.1, 0.01, 0); // 5, 0.05, 0.01
         extensionPID = new PIDFController(10, 0.1, 0.1, 0);
 
         extension = hardwareMap.get(DcMotorEx.class, "extension");
@@ -44,32 +43,32 @@ public class Extension {
 
         extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         extensionHinge.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
     }
 
     public void hingePIDControl(HingePosition pos) {
         int target = 5;
         switch (pos) {
             case TOP:
-                target = 1875;
+                target = 715;
                 break;
             case BOTTOM:
                 target = 10;
                 break;
             case SPECIMEN:
-                target = 1480;
+                target = 540;
                 break;
             case HANG_FLEX:
-                target = 1400;
+                target = 460;
                 break;
         }
 
         hingePID.setSetPoint(target);
+
         while (!hingePID.atSetPoint()) {
             double output = hingePID.calculate(extensionHinge.getCurrentPosition(), hingePID.getSetPoint());
             extensionHinge.setVelocity(output);
         }
+
         extensionHinge.setVelocity(0);
     }
 
@@ -86,7 +85,7 @@ public class Extension {
                 target = 2800;
                 break;
             case SPECIMEN:
-                target = 340;
+                target = 200;
                 break;
             case HANG_1:
                 target = 1000;
@@ -98,12 +97,13 @@ public class Extension {
                 target = 300;
                 break;
         }
-
         extensionPID.setSetPoint(target);
+
         while (!extensionPID.atSetPoint()) {
             double output = extensionPID.calculate(extension.getCurrentPosition(), extensionPID.getSetPoint());
             extension.setVelocity(output);
         }
+
         extension.setVelocity(0);
     }
 }

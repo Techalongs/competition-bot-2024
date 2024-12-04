@@ -25,6 +25,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
                 // Arm Controls
+                juliette.hingeArm(-gamepad2.right_stick_y);
                 // juliette.hingeArm(-gamepad2.right_stick_y);
 //                if (gamepad2.left_stick_y == 0 && juliette.getExtensionHingePosition() != stayPosition && juliette.getExtensionHingePosition() < 200) {
 //                    if (stayPosition == 0) stayPosition = juliette.getExtensionPosition();
