@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -11,10 +12,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.HashMap;
 
 public class Robot extends MecanumDrivetrain {
-    private final DcMotor extensionHinge;
-    private final DcMotor extension;
-    private final DcMotor leftHookHinge;
-    private final DcMotor rightHookHinge;
+    private final DcMotorEx extensionHinge;
+    private final DcMotorEx extension;
+    private final DcMotorEx leftHookHinge;
+    private final DcMotorEx rightHookHinge;
     private final Servo clawServo;
     private final Servo clawHinge;
     private final TouchSensor hingeTopLimit;
@@ -26,10 +27,10 @@ public class Robot extends MecanumDrivetrain {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
         super(hardwareMap);
 
-        extensionHinge = hardwareMap.get(DcMotor.class, "armHinge");
-        extension = hardwareMap.get(DcMotor.class, "extension");
-        leftHookHinge = hardwareMap.get(DcMotor.class, "leftHookHinge");
-        rightHookHinge = hardwareMap.get(DcMotor.class, "rightHookHinge");
+        extensionHinge = hardwareMap.get(DcMotorEx.class, "armHinge");
+        extension = hardwareMap.get(DcMotorEx.class, "extension");
+        leftHookHinge = hardwareMap.get(DcMotorEx.class, "leftHookHinge");
+        rightHookHinge = hardwareMap.get(DcMotorEx.class, "rightHookHinge");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHinge = hardwareMap.get(Servo.class, "clawHinge");
         hingeTopLimit = hardwareMap.get(TouchSensor.class, "hingeTopLimit");
@@ -96,6 +97,10 @@ public class Robot extends MecanumDrivetrain {
 //    public void stopHinge() {
 //        extensionHinge.setPower(0);
 //    }
+
+    public void moveExtension(double power) {
+        extension.setPower(power);
+    }
 //
 //    public void moveExtension(double power) {
 //        if (power < 0 && !extensionBottomLimit.isPressed()) {
@@ -125,12 +130,9 @@ public class Robot extends MecanumDrivetrain {
 //        extendExtension(-ticks);
 //    }
 
-    public void hingeHooksDown() {
-        leftHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftHookHinge.setTargetPosition(200);
-        rightHookHinge.setTargetPosition(200);
+    public void hingeHooksReady() {
+        leftHookHinge.setTargetPosition(-400);
+        rightHookHinge.setTargetPosition(130);
 
         leftHookHinge.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightHookHinge.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -146,12 +148,9 @@ public class Robot extends MecanumDrivetrain {
         rightHookHinge.setPower(0);
     }
 
-    public void hingeHooksUp() {
-        leftHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightHookHinge.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftHookHinge.setTargetPosition(-200);
-        rightHookHinge.setTargetPosition(-200);
+    public void hingeHooks() {
+        leftHookHinge.setTargetPosition(-165);
+        rightHookHinge.setTargetPosition(300);
 
         leftHookHinge.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightHookHinge.setMode(DcMotor.RunMode.RUN_TO_POSITION);

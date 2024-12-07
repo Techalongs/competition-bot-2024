@@ -41,7 +41,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
 //                }
 
                 // Extension Controls
-                // juliette.moveExtension(-gamepad2.left_stick_y);
+                juliette.moveExtension(-gamepad2.left_stick_y);
 
                 // Claw Hinge Controls
                 if (gamepad2.left_bumper) juliette.clawHingeUp();
@@ -52,8 +52,8 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 else if (gamepad2.b) juliette.openClaws();
 
                 // Hook Controls
-                if (gamepad2.dpad_up) juliette.hingeHooksUp();
-                else if (gamepad2.dpad_down) juliette.hingeHooksDown();
+                if (gamepad2.dpad_up) juliette.hingeHooks();
+                else if (gamepad2.dpad_down) juliette.hingeHooksReady();
 
                 // Driver Automation - Hang
                 if (gamepad2.right_trigger > 0.7 && gamepad2.left_trigger > 0.7 && gamepad1.y) {

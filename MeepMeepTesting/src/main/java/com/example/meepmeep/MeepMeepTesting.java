@@ -1,6 +1,7 @@
 package com.example.meepmeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -17,9 +18,8 @@ public class MeepMeepTesting {
                 .setStartPose(new Pose2d(11.25, 35.04, Math.toRadians(270)))
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(59, 48, Math.toRadians(225)))
-                .turn(Math.toRadians(45))
-                .strafeTo(new Vector2d(47, 36))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(59, 43, Math.toRadians(225)))
+                .lineToYConstantHeading(40)
                 .build());
 
 

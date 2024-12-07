@@ -35,28 +35,31 @@ public class WalkingJuliette extends LinearOpMode {
 
                 // Pickup
                 if (gamepad2.a) {
-                    Actions.runBlocking(claw.hingeUp());
-                    extension.hingePIDControl(Extension.HingePosition.BOTTOM);
-                    extension.extensionPIDControl(Extension.ExtensionPosition.PICKUP);
-                    Actions.runBlocking(new SequentialAction(
-                            claw.openClaw(),
-                            sleepAction(100),
-                            claw.hingeDown()
-                    ));
+                    Actions.runBlocking(
+                            new SequentialAction(
+                                    claw.hingeUp(),
+                                    extension.hingePIDControl(Extension.HingePosition.BOTTOM),
+                                    extension.extensionPIDControl(Extension.ExtensionPosition.PICKUP),
+                                    claw.openClaw(),
+                                    sleepAction(100),
+                                    claw.hingeDown()
+                            )
+                    );
                 }
 
                 // Specimen
                 if (gamepad2.b && gamepad2.right_trigger > 0.5) { // Part 1
-                    extension.hingePIDControl(Extension.HingePosition.HANG_FLEX);
+                    Actions.runBlocking(extension.hingePIDControl(Extension.HingePosition.HANG_FLEX));
                 } else if (gamepad2.b) { // Part 2
-                    Actions.runBlocking(new SequentialAction(
-                            claw.closeClaw(),
-                            claw.hingeUp()
-                    ));
-
-                    extension.hingePIDControl(Extension.HingePosition.TOP);
-                    sleep(100);
-                    extension.extensionPIDControl(Extension.ExtensionPosition.SPECIMEN);
+                    Actions.runBlocking(
+                            new SequentialAction(
+                                    claw.closeClaw(),
+                                    claw.hingeUp(),
+                                    extension.hingePIDControl(Extension.HingePosition.TOP),
+                                    sleepAction(100),
+                                    extension.extensionPIDControl(Extension.ExtensionPosition.SPECIMEN)
+                            )
+                    );
                 }
 
                 // Sample
@@ -67,25 +70,31 @@ public class WalkingJuliette extends LinearOpMode {
                             claw.openClaw(),
                             sleepAction(250),
                             claw.hingeDown(),
-                            sleepAction(250)
+                            sleepAction(250),
+                            extension.hingePIDControl(Extension.HingePosition.HANG_FLEX),
+                            extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM),
+                            extension.hingePIDControl(Extension.HingePosition.BOTTOM),
+                            claw.hingeUp()
                     ));
-
-                    extension.hingePIDControl(Extension.HingePosition.HANG_FLEX);
-                    extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM);
-                    extension.hingePIDControl(Extension.HingePosition.BOTTOM);
-
-                    Actions.runBlocking(claw.hingeUp());
                 } else if (gamepad2.x) { // Part 1
-                    Actions.runBlocking(claw.hingeDown());
-                    extension.hingePIDControl(Extension.HingePosition.TOP);
-                    extension.extensionPIDControl(Extension.ExtensionPosition.BUCKET);
+                    Actions.runBlocking(
+                            new SequentialAction(
+                                    claw.hingeDown(),
+                                    extension.hingePIDControl(Extension.HingePosition.TOP),
+                                    extension.extensionPIDControl(Extension.ExtensionPosition.BUCKET)
+                            )
+                    );
                 }
 
                 // Base Position
                 if (gamepad2.y) {
-                    Actions.runBlocking(claw.hingeUp());
-                    extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM);
-                    extension.hingePIDControl(Extension.HingePosition.BOTTOM);
+                    Actions.runBlocking(
+                            new SequentialAction(
+                                    claw.hingeUp(),
+                                    extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM),
+                                    extension.hingePIDControl(Extension.HingePosition.BOTTOM)
+                            )
+                    );
                 }
 
                 // Claw Toggle
@@ -106,23 +115,29 @@ public class WalkingJuliette extends LinearOpMode {
 
                 // Hang
                 if (gamepad2.left_trigger > 0.7 && gamepad2.right_trigger > 0.7 && gamepad2.dpad_up) {
-                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_1);
-                    sleep(100);
-                    hooks.hooksPIDControl(Hooks.HookPosition.READY);
-                    sleep(100);
-                    extension.hingePIDControl(Extension.HingePosition.TOP);
-                    sleep(100);
-                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_2);
-                    sleep(100);
-                    extension.hingePIDControl(Extension.HingePosition.HANG_FLEX);
-                    sleep(100);
-                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_3);
-                    sleep(100);
-                    hooks.hooksPIDControl(Hooks.HookPosition.HOOK);
-                    sleep(100);
-                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_1);
-                    sleep(100);
-                    extension.hingePIDControl(Extension.HingePosition.BOTTOM);
+                    Actions.runBlocking(
+                            new SequentialAction(
+                                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_1),
+                                    sleepAction(100),
+                                    hooks.hooksPIDControl(Hooks.HookPosition.READY),
+                                    sleepAction(100),
+                                    extension.hingePIDControl(Extension.HingePosition.TOP),
+                                    sleepAction(100),
+                                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_2),
+                                    hooks.hooksPIDControl(Hooks.HookPosition.HOOK),
+                                    sleepAction(100),
+                                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_1),
+                                    sleepAction(100),
+                                    extension.hingePIDControl(Extension.HingePosition.HANG_FLEX)
+                            )
+                    );
+                    // extend to hang_2??
+                    // hinge to top
+                    // extend hang_1
+                    // hooks to ready
+                    // extend bottom
+                    // hooks to hook
+                    // hinge to bottom
                 }
 
                 juliette.displayData();

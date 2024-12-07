@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -45,65 +49,90 @@ public class Extension {
         extensionHinge.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void hingePIDControl(HingePosition pos) {
-        int target = 5;
-        switch (pos) {
-            case TOP:
-                target = 715;
-                break;
-            case BOTTOM:
-                target = 10;
-                break;
-            case SPECIMEN:
-                target = 540;
-                break;
-            case HANG_FLEX:
-                target = 460;
-                break;
-        }
+    public Action hingePIDControl(HingePosition pos) {
+        return new Action() {
+            boolean init = false;
 
-        hingePID.setSetPoint(target);
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!init) {
+                    int target = 5;
+                    switch (pos) {
+                        case TOP:
+                            target = 800;
+                            break;
+                        case BOTTOM:
+                            target = 10;
+                            break;
+                        case SPECIMEN:
+                            target = 540;
+                            break;
+                        case HANG_FLEX:
+                            target = 460;
+                            break;
+                    }
 
-        while (!hingePID.atSetPoint()) {
-            double output = hingePID.calculate(extensionHinge.getCurrentPosition(), hingePID.getSetPoint());
-            extensionHinge.setVelocity(output);
-        }
+                    hingePID.setSetPoint(target);
+                    init = true;
+                }
 
-        extensionHinge.setVelocity(0);
+                if (!hingePID.atSetPoint()) {
+                    double output = hingePID.calculate(extensionHinge.getCurrentPosition(), hingePID.getSetPoint());
+                    extensionHinge.setVelocity(output);
+                    return true;
+                }
+
+                extensionHinge.setVelocity(0.01);
+                return false;
+            }
+        };
     }
 
-    public void extensionPIDControl(ExtensionPosition pos) {
-        int target = 5;
-        switch (pos) {
-            case BOTTOM:
-                target = 15;
-                break;
-            case PICKUP:
-                target = 1150;
-                break;
-            case BUCKET:
-                target = 2800;
-                break;
-            case SPECIMEN:
-                target = 200;
-                break;
-            case HANG_1:
-                target = 1000;
-                break;
-            case HANG_2:
-                target = 600;
-                break;
-            case HANG_3:
-                target = 300;
-                break;
-        }
-        extensionPID.setSetPoint(target);
+    public Action extensionPIDControl(ExtensionPosition pos) {
+        return new Action() {
+            boolean init = false;
 
-        while (!extensionPID.atSetPoint()) {
-            double output = extensionPID.calculate(extension.getCurrentPosition(), extensionPID.getSetPoint());
-            extension.setVelocity(output);
-        }
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!init) {
+                    int target = 5;
+                    switch (pos) {
+                        case BOTTOM:
+                            target = 15;
+                            break;
+                        case PICKUP:
+                            target = 1150;
+                            break;
+                        case BUCKET:
+                            target = 2800;
+                            break;
+                        case SPECIMEN:
+                            target = 200;
+                            break;
+                        case HANG_1:
+                            target = 1000;
+                            break;
+                        case HANG_2:
+                            target = 325;
+                            break;
+                        case HANG_3:
+                            target = 300;
+                            break;
+                    }
 
-        extension.setVelocity(0);
+                    extensionPID.setSetPoint(target);
+                    init = false;
+                }
+
+                if (!extensionPID.atSetPoint()) {
+                    double output = extensionPID.calculate(extension.getCurrentPosition(), extensionPID.getSetPoint());
+                    extension.setVelocity(output);
+                    return true;
+                }
+
+                extension.setVelocity(0.01);
+                return false;
+            }
+        };
     }
 }

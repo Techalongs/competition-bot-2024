@@ -31,90 +31,67 @@ public class SampleWithoutSpecimen extends LinearOpMode {
 
         if (opModeIsActive()) {
             // Goes to bucket
-            TrajectoryActionBuilder traj1 = drive.actionBuilder(new Pose2d(14.58, 62.66, Math.toRadians(270.00)))
-                    .strafeTo(new Vector2d(59, 48))
+            TrajectoryActionBuilder toBucket1 = drive.actionBuilder(new Pose2d(14.58, 62.66, Math.toRadians(270.00)))
+                    .strafeTo(new Vector2d(58, 38))
                     .turn(Math.toRadians(-45));
+
+            // Backs away from bucket
+            TrajectoryActionBuilder backFromBucket = drive.actionBuilder(new Pose2d(58, 38, Math.toRadians(225)))
+                    .turn(Math.toRadians(45));
 
             // Goes to first sample
-            TrajectoryActionBuilder traj2 = drive.actionBuilder(new Pose2d(59, 48, Math.toRadians(225)))
-                    .turn(Math.toRadians(45))
-                    .strafeTo(new Vector2d(47, 36));
+            TrajectoryActionBuilder toFirstSample = drive.actionBuilder(new Pose2d(56, 37, Math.toRadians(270)))
+                    .strafeTo(new Vector2d(43, 31));
 
             // Goes to bucket again
-            TrajectoryActionBuilder traj3 = drive.actionBuilder(new Pose2d(47, 36, Math.toRadians(270.00)))
-                    .strafeTo(new Vector2d(59, 48))
-                    .turn(Math.toRadians(-45));
+            TrajectoryActionBuilder toBucket2 = drive.actionBuilder(new Pose2d(43, 31, Math.toRadians(270.00)))
+                    .turn(Math.toRadians(-45))
+                    .strafeTo(new Vector2d(50, 30));
 
-            Actions.runBlocking(new SequentialAction(
-                    traj1.build(),
-                    new SequentialAction(
-                            claw.hingeDown(),
-                            sleepAction(100)
-                    )
-            ));
-
-            extension.hingePIDControl(Extension.HingePosition.TOP);
-            extension.extensionPIDControl(Extension.ExtensionPosition.BUCKET);
-
-            Actions.runBlocking(
-                    new SequentialAction(
-                            claw.hingeUp(),
-                            sleepAction(250),
-                            claw.openClaw(), // Places sample
-                            sleepAction(250),
-                            claw.hingeDown(),
-                            sleepAction(250)
-                    )
-            );
-            extension.hingePIDControl(Extension.HingePosition.HANG_FLEX);
-            sleep(250);
-            extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM);
-            extension.hingePIDControl(Extension.HingePosition.BOTTOM);
-
-            Actions.runBlocking(new SequentialAction(
-                    claw.hingeUp(),
-                    traj2.build()
-            ));
-
-            extension.extensionPIDControl(Extension.ExtensionPosition.PICKUP);
-
-            Actions.runBlocking(new SequentialAction(
-                            claw.openClaw(),
-                            sleepAction(250),
-                            claw.hingeDown(),
-                            sleepAction(1000),
-                            claw.closeClaw(),
-                            sleepAction(500),
-                            claw.hingeUp()
-            ));
-
-            extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM);
-
-            Actions.runBlocking(new SequentialAction(
-                    traj3.build(),
+            Action placeInBucket = new SequentialAction(
                     claw.hingeDown(),
-                    sleepAction(100)
-            ));
+                    extension.hingePIDControl(Extension.HingePosition.TOP),
+                    extension.extensionPIDControl(Extension.ExtensionPosition.BUCKET),
+                    claw.hingeUp(),
+                    sleepAction(100),
+                    claw.openClaw(),
+                    sleepAction(500),
+                    claw.hingeDown()
+            );
 
-            extension.hingePIDControl(Extension.HingePosition.TOP);
-            extension.extensionPIDControl(Extension.ExtensionPosition.BUCKET);
+            Action pickUpSample = new SequentialAction(
+                    claw.hingeUp(),
+                    extension.hingePIDControl(Extension.HingePosition.BOTTOM),
+                    extension.extensionPIDControl(Extension.ExtensionPosition.PICKUP),
+                    claw.openClaw(),
+                    sleepAction(250),
+                    claw.hingeDown(),
+                    sleepAction(250),
+                    claw.closeClaw(),
+                    sleepAction(500),
+                    claw.hingeUp()
+            );
+
+            Action returnToReady = new SequentialAction(
+                    claw.hingeUp(),
+                    extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM),
+                    extension.hingePIDControl(Extension.HingePosition.BOTTOM)
+            );
 
             Actions.runBlocking(
                     new SequentialAction(
-                            claw.hingeUp(),
-                            sleepAction(250),
-                            claw.openClaw(), // Places sample
-                            sleepAction(250),
-                            claw.hingeDown(),
-                            sleepAction(250)
+                            toBucket1.build(),
+                            placeInBucket,
+                            backFromBucket.build(),
+                            returnToReady,
+                            toFirstSample.build(),
+                            pickUpSample,
+                            returnToReady,
+                            toBucket2.build(),
+                            placeInBucket,
+                            returnToReady
                     )
             );
-
-            extension.hingePIDControl(Extension.HingePosition.HANG_FLEX);
-            sleep(250);
-            extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM);
-            extension.hingePIDControl(Extension.HingePosition.BOTTOM);
-            Actions.runBlocking(claw.hingeUp());
         }
     }
 
