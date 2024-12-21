@@ -12,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.HashMap;
 
 public class Robot extends MecanumDrivetrain {
-    private final DcMotorEx extensionHinge;
-    private final DcMotorEx extension;
+    private final DcMotor extensionHinge;
+    private final DcMotor extension;
     private final DcMotorEx leftHookHinge;
     private final DcMotorEx rightHookHinge;
     private final Servo clawServo;
@@ -27,8 +27,8 @@ public class Robot extends MecanumDrivetrain {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
         super(hardwareMap);
 
-        extensionHinge = hardwareMap.get(DcMotorEx.class, "armHinge");
-        extension = hardwareMap.get(DcMotorEx.class, "extension");
+        extensionHinge = hardwareMap.get(DcMotor.class, "armHinge");
+        extension = hardwareMap.get(DcMotor.class, "extension");
         leftHookHinge = hardwareMap.get(DcMotorEx.class, "leftHookHinge");
         rightHookHinge = hardwareMap.get(DcMotorEx.class, "rightHookHinge");
         clawServo = hardwareMap.get(Servo.class, "clawServo");

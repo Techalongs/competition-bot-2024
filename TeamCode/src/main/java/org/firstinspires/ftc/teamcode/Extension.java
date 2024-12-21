@@ -59,7 +59,7 @@ public class Extension {
                     int target = 5;
                     switch (pos) {
                         case TOP:
-                            target = 800;
+                            target = 880;
                             break;
                         case BOTTOM:
                             target = 10;
@@ -68,7 +68,7 @@ public class Extension {
                             target = 540;
                             break;
                         case HANG_FLEX:
-                            target = 460;
+                            target = 615;
                             break;
                     }
 
@@ -113,10 +113,10 @@ public class Extension {
                             target = 1000;
                             break;
                         case HANG_2:
-                            target = 325;
+                            target = 640;
                             break;
                         case HANG_3:
-                            target = 300;
+                            target = 400;
                             break;
                     }
 

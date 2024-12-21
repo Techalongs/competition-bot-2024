@@ -18,6 +18,7 @@ public class SampleWithoutSpecimen extends LinearOpMode {
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.25, 35.04, Math.toRadians(270)));
         Extension extension = new Extension(hardwareMap);
+        Hooks hooks = new Hooks(hardwareMap);
         Claw claw = new Claw(hardwareMap);
 
         Actions.runBlocking(new SequentialAction(
@@ -47,6 +48,10 @@ public class SampleWithoutSpecimen extends LinearOpMode {
             TrajectoryActionBuilder toBucket2 = drive.actionBuilder(new Pose2d(43, 31, Math.toRadians(270.00)))
                     .turn(Math.toRadians(-45))
                     .strafeTo(new Vector2d(50, 30));
+
+            TrajectoryActionBuilder toPark = drive.actionBuilder(new Pose2d(58, 38, Math.toRadians(270)))
+                    .splineTo(new Vector2d(20, -20), Math.toRadians(180))
+                    .turn(Math.toRadians(180));
 
             Action placeInBucket = new SequentialAction(
                     claw.hingeDown(),
@@ -84,12 +89,17 @@ public class SampleWithoutSpecimen extends LinearOpMode {
                             placeInBucket,
                             backFromBucket.build(),
                             returnToReady,
-                            toFirstSample.build(),
-                            pickUpSample,
-                            returnToReady,
-                            toBucket2.build(),
-                            placeInBucket,
-                            returnToReady
+                            toPark.build(),
+                            drive.actionBuilder(new Pose2d(-20, 20, Math.toRadians(0)))
+                                    .lineToX(-30)
+                                    .build(),
+                            hooks.hooksPIDControl(Hooks.HookPosition.HOOK)
+//                            toFirstSample.build(),
+//                            pickUpSample,
+//                            returnToReady,
+//                            toBucket2.build(),
+//                            placeInBucket,
+//                            returnToReady
                     )
             );
         }

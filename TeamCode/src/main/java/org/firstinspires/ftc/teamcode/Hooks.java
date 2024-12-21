@@ -53,12 +53,12 @@ public class Hooks {
                             target2 = 0;
                             break;
                         case READY:
-                            target1 = -235;
-                            target2 = 220;
+                            target1 = 0;
+                            target2 = 100;
                             break;
                         case HOOK:
-                            target1 = -165;
-                            target2 = 300;
+                            target1 = 161;
+                            target2 = 250;
                             break;
                     }
 

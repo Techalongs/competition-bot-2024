@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,9 +22,17 @@ public class WalkingJuliette extends LinearOpMode {
         Claw claw = new Claw(hardwareMap);
         Hooks hooks = new Hooks(hardwareMap);
 
+        boolean clawHingePrev = gamepad2.right_bumper;
+        boolean clawPrev = gamepad2.left_bumper;
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
+
+        Actions.runBlocking(new ParallelAction(
+                claw.hingeUp(),
+                claw.closeClaw()
+        ));
 
         while (opModeIsActive()) {
             if (opModeIsActive()) {
@@ -98,19 +107,19 @@ public class WalkingJuliette extends LinearOpMode {
                 }
 
                 // Claw Toggle
-                if (gamepad2.left_bumper && gamepad2.right_trigger > 0.5) {
+                if (gamepad2.left_bumper && gamepad2.left_bumper != clawPrev) {
                     if (claw.getPosition() == Claw.ClawPosition.OPEN)
                         Actions.runBlocking(claw.closeClaw());
                     else Actions.runBlocking(claw.openClaw());
-                    sleep(10);
+                    sleep(250);
                 }
 
                 // Claw Hinge Toggle
-                if (gamepad2.right_bumper && gamepad2.left_trigger > 0.5) {
+                if (gamepad2.right_bumper && gamepad2.right_bumper != clawHingePrev) {
                     if (claw.getHingePosition() == Claw.ClawHingePosition.UP)
                         Actions.runBlocking(claw.hingeDown());
                     else Actions.runBlocking(claw.hingeUp());
-                    sleep(10);
+                    sleep(250);
                 }
 
                 // Hang
@@ -119,16 +128,25 @@ public class WalkingJuliette extends LinearOpMode {
                             new SequentialAction(
                                     extension.extensionPIDControl(Extension.ExtensionPosition.HANG_1),
                                     sleepAction(100),
-                                    hooks.hooksPIDControl(Hooks.HookPosition.READY),
-                                    sleepAction(100),
+                                    // hooks.hooksPIDControl(Hooks.HookPosition.READY),
+                                    // sleepAction(100),
                                     extension.hingePIDControl(Extension.HingePosition.TOP),
-                                    sleepAction(100),
+                                    sleepAction(250),
                                     extension.extensionPIDControl(Extension.ExtensionPosition.HANG_2),
-                                    hooks.hooksPIDControl(Hooks.HookPosition.HOOK),
                                     sleepAction(100),
-                                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_1),
-                                    sleepAction(100),
-                                    extension.hingePIDControl(Extension.HingePosition.HANG_FLEX)
+                                    new ParallelAction(
+                                            extension.hingePIDControl(Extension.HingePosition.BOTTOM),
+                                            extension.extensionPIDControl(Extension.ExtensionPosition.BOTTOM)
+                                    )
+//                                    sleepAction(100),
+//                                    new ParallelAction(
+//                                            extension.hingePIDControl(Extension.HingePosition.BOTTOM),
+//                                            extension.extensionPIDControl(Extension.ExtensionPosition.HANG_3)
+//                                    ),
+//                                    sleepAction(100),
+//                                    extension.extensionPIDControl(Extension.ExtensionPosition.HANG_1),
+//                                    sleepAction(100)
+                                    // extension.hingePIDControl(Extension.HingePosition.HANG_FLEX)
                             )
                     );
                     // extend to hang_2??
