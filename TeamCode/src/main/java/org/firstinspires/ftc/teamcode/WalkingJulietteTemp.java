@@ -8,8 +8,13 @@ public class WalkingJulietteTemp extends LinearOpMode {
     private int stayPosition;
     @Override
     public void runOpMode() {
-        Robot juliette = new Robot(hardwareMap, telemetry, this, 0.9);
+        Robot juliette = new Robot(hardwareMap, telemetry, 0.9);
         juliette.init();
+
+        boolean verticalClawPrev = gamepad2.a;
+        boolean horizontalClawPrev = gamepad2.b;
+        boolean verticalHingePrev = gamepad2.x;
+        boolean horizontalHingePrev = gamepad2.y;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -24,42 +29,34 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 else juliette.drive(0.6, gamepad1);
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
-                // Arm Controls
-
-                if (gamepad2.right_stick_y != 0) juliette.hingeArm(gamepad2.right_stick_y);
-
-                // juliette.hingeArm(-gamepad2.right_stick_y);
-//                if (gamepad2.left_stick_y == 0 && juliette.getExtensionHingePosition() != stayPosition && juliette.getExtensionHingePosition() < 200) {
-//                    if (stayPosition == 0) stayPosition = juliette.getExtensionPosition();
-//                    juliette.stayHinge(stayPosition);
-//                } else if (gamepad2.left_stick_y == 0) {
-//                    juliette.stopHinge();
-//                } else {
-//                    stayPosition = 0;
-//
-//                    double armPower = -gamepad2.left_stick_y;
-//                    if (armPower > 0) juliette.hingeArm(armPower * 0.6);
-//                    else juliette.hingeArm(armPower);
-//                }
-
-                // Extension Controls
-                if (gamepad2.left_stick_y != 0) juliette.moveExtension(gamepad2.left_stick_y);
-
-                // Claw Hinge Controls
-                if (gamepad2.left_bumper) juliette.clawHingeUp();
-                else if (gamepad2.right_bumper) juliette.clawHingeDown();
+                // Arm and Extension Controls
+                juliette.moveArm(gamepad2.left_stick_y);
+                juliette.moveExtension(gamepad2.right_stick_y);
 
                 // Claw Controls
-                if (gamepad2.a) juliette.closeClaws();
-                else if (gamepad2.b) juliette.openClaws();
+                if (gamepad2.a && gamepad2.a != verticalClawPrev) {
+                    if (juliette.getVerticalClawPosition() == 1) {
+                        juliette.closeVerticalClaw();
+                    } else juliette.openVerticalClaw();
+                }
 
-                // Hook Controls
-                if (gamepad2.dpad_up) juliette.hingeHooks();
-                else if (gamepad2.dpad_down) juliette.hingeHooksReady();
+                if (gamepad2.b && gamepad2.b != horizontalClawPrev) {
+                    if (juliette.getHorizontalClawPosition() == 1) {
+                        juliette.closeHorizontalClaw();
+                    } else juliette.openHorizontalClaw();
+                }
 
-                // Driver Automation - Hang
-                if (gamepad2.right_trigger > 0.7 && gamepad2.left_trigger > 0.7 && gamepad1.y) {
+                // Claw Hinge Controls
+                if (gamepad2.x && gamepad2.x != verticalHingePrev) {
+                    if (juliette.getVerticalHingePosition() == 1) {
+                        juliette.verticalHingeUp();
+                    } else juliette.verticalHingeDown();
+                }
 
+                if (gamepad2.y && gamepad2.y != horizontalHingePrev) {
+                    if (juliette.getHorizontalHingePosition() == 1) {
+                        juliette.horizontalHingeUp();
+                    } else juliette.horizontalHingeDown();
                 }
 
                 juliette.displayData();

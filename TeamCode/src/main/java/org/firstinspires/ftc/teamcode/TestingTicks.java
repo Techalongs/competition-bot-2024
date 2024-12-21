@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class TestingTicks extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot juliette = new Robot(hardwareMap, telemetry, this);
+        Robot juliette = new Robot(hardwareMap, telemetry);
         juliette.init();
 
         telemetry.addData("Status", "Initialized");
