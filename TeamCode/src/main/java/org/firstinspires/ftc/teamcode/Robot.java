@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -14,6 +13,7 @@ public class Robot extends MecanumDrivetrain {
     private final DcMotor arm;
     private final DcMotor extension;
     private final Servo horizontalClaw;
+    private final Servo horizontalWrist;
     private final Servo horizontalClawHinge;
     private final Servo verticalClaw;
     private final Servo verticalClawHinge;
@@ -27,6 +27,7 @@ public class Robot extends MecanumDrivetrain {
         arm = hardwareMap.get(DcMotor.class, "verticalArm");
         extension = hardwareMap.get(DcMotor.class, "horizontalExtension");
         horizontalClaw = hardwareMap.get(Servo.class, "horizontalClaw");
+        horizontalWrist = hardwareMap.get(Servo.class, "horizontalWrist");
         horizontalClawHinge = hardwareMap.get(Servo.class, "horizontalClawHinge");
         verticalClaw = hardwareMap.get(Servo.class, "verticalClaw");
         verticalClawHinge = hardwareMap.get(Servo.class, "verticalClawHinge");
@@ -59,19 +60,36 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void moveExtension(double power) {
-        extension.setPower(power);
+        if (extension.getCurrentPosition() > -1520 || power > 0) extension.setPower(power);
+        else extension.setPower(0);
     }
 
     public void openHorizontalClaw() {
         horizontalClaw.setPosition(1);
     }
 
+    public void loosenHorizontalClaw() {
+        horizontalClaw.setPosition(0.05);
+    }
+
     public void closeHorizontalClaw() {
         horizontalClaw.setPosition(0);
     }
 
+    public void horizontalWristUp() {
+        horizontalWrist.setPosition(1);
+    }
+
+    public void horizontalWristDown() {
+        horizontalWrist.setPosition(0.85);
+    }
+
     public void horizontalHingeUp() {
         horizontalClawHinge.setPosition(0);
+    }
+
+    public void horizontalHingeMid() {
+        horizontalClawHinge.setPosition(0.75);
     }
 
     public void horizontalHingeDown() {
@@ -87,11 +105,15 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void verticalHingeUp() {
-        verticalClawHinge.setPosition(0);
+        verticalClawHinge.setPosition(0.5);
+    }
+
+    public void verticalHingeMid() {
+        verticalClawHinge.setPosition(0.35);
     }
 
     public void verticalHingeDown() {
-        verticalClawHinge.setPosition(1);
+        verticalClawHinge.setPosition(0);
     }
 
     public double getArmPower() {
@@ -112,6 +134,10 @@ public class Robot extends MecanumDrivetrain {
 
     public double getHorizontalClawPosition() {
         return horizontalClaw.getPosition();
+    }
+
+    public double getHorizontalWristPosition() {
+        return horizontalWrist.getPosition();
     }
 
     public double getHorizontalHingePosition() {
@@ -153,6 +179,7 @@ public class Robot extends MecanumDrivetrain {
         telemetry.addData("Arm Position", getArmPosition());
         telemetry.addData("Extension Position", getExtensionPosition());
         telemetry.addData("Horizontal Claw Position", getHorizontalClawPosition());
+        telemetry.addData("Horizontal Wrist Position", getHorizontalWristPosition());
         telemetry.addData("Horizontal Claw Hinge Position", getHorizontalHingePosition());
         telemetry.addData("Vertical Claw Position", getVerticalClawPosition());
         telemetry.addData("Vertical Claw Hinge Position", getVerticalHingePosition());

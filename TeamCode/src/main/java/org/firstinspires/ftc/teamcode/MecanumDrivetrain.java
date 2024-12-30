@@ -17,7 +17,10 @@ public class MecanumDrivetrain {
         backLeft = hardwareMap.get(DcMotor.class, "CH0");
         backRight = hardwareMap.get(DcMotor.class, "CH1");
 
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        // backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -36,10 +39,10 @@ public class MecanumDrivetrain {
     }
 
     public void drive(double limiter, Gamepad gamepad) {
-        float FLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) + gamepad.left_stick_x;
-        float FRPower = (-gamepad.left_stick_y - gamepad.right_stick_x) - gamepad.left_stick_x;
-        float BLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) - gamepad.left_stick_x;
-        float BRPower = (-gamepad.left_stick_y - gamepad.right_stick_x) + gamepad.left_stick_x;
+        float FLPower = (-gamepad.left_stick_y - gamepad.right_stick_x) + gamepad.left_stick_x;
+        float FRPower = (-gamepad.left_stick_y + gamepad.right_stick_x) - gamepad.left_stick_x;
+        float BLPower = (-gamepad.left_stick_y - gamepad.right_stick_x) - gamepad.left_stick_x;
+        float BRPower = (-gamepad.left_stick_y + gamepad.right_stick_x) + gamepad.left_stick_x;
 
         frontLeft.setPower(FLPower * limiter);
         frontRight.setPower(FRPower * limiter);
