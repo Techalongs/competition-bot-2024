@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@Deprecated
 public class Extension {
     private final DcMotorEx extension;
     private final DcMotorEx extensionHinge;

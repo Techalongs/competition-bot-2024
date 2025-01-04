@@ -5,17 +5,14 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class VerticalExtension {
+public class HorizontalExtension {
     private final DcMotor extension;
 
     public enum Position {
         BOTTOM(-10),
-        SPECIMEN_1(-700),
-        SPECIMEN_2(-1550),
-        TOP(-3200);
+        TOP(-1520);
 
         private final int ticks;
 
@@ -24,10 +21,9 @@ public class VerticalExtension {
         }
     }
 
-    public VerticalExtension(HardwareMap hardwareMap) {
-        extension = hardwareMap.get(DcMotor.class, "verticalArm");
+    public HorizontalExtension(HardwareMap hardwareMap) {
+        extension = hardwareMap.get(DcMotor.class, "horizontalExtension");
 
-        extension.setDirection(DcMotorSimple.Direction.REVERSE);
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

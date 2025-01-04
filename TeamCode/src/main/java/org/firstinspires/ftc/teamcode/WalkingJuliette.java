@@ -19,7 +19,7 @@ public class WalkingJuliette extends LinearOpMode {
 
         MecanumDrivetrain drivetrain = new MecanumDrivetrain(hardwareMap);
         // Extension extension = new Extension(hardwareMap);
-        // Claw claw = new Claw(hardwareMap);
+        // VerticalClaw claw = new VerticalClaw(hardwareMap);
         // Hooks hooks = new Hooks(hardwareMap);
 
 //        boolean clawHingePrev = gamepad2.right_bumper;
@@ -31,7 +31,7 @@ public class WalkingJuliette extends LinearOpMode {
 
 //        Actions.runBlocking(new ParallelAction(
 //                claw.hingeUp(),
-//                claw.closeClaw()
+//                claw.close()
 //        ));
 
         while (opModeIsActive()) {
@@ -62,7 +62,7 @@ public class WalkingJuliette extends LinearOpMode {
 //                } else if (gamepad2.b) { // Part 2
 //                    Actions.runBlocking(
 //                            new SequentialAction(
-//                                    claw.closeClaw(),
+//                                    claw.close(),
 //                                    claw.hingeUp(),
 //                                    extension.hingePIDControl(Extension.HingePosition.TOP),
 //                                    sleepAction(100),
@@ -106,17 +106,17 @@ public class WalkingJuliette extends LinearOpMode {
 //                    );
 //                }
 //
-//                // Claw Toggle
+//                // VerticalClaw Toggle
 //                if (gamepad2.left_bumper && gamepad2.left_bumper != clawPrev) {
-//                    if (claw.getPosition() == Claw.ClawPosition.OPEN)
-//                        Actions.runBlocking(claw.closeClaw());
+//                    if (claw.getPosition() == VerticalClaw.Position.OPEN)
+//                        Actions.runBlocking(claw.close());
 //                    else Actions.runBlocking(claw.openClaw());
 //                    sleep(250);
 //                }
 //
-//                // Claw Hinge Toggle
+//                // VerticalClaw Hinge Toggle
 //                if (gamepad2.right_bumper && gamepad2.right_bumper != clawHingePrev) {
-//                    if (claw.getHingePosition() == Claw.ClawHingePosition.UP)
+//                    if (claw.getHingePosition() == VerticalClaw.HingePosition.UP)
 //                        Actions.runBlocking(claw.hingeDown());
 //                    else Actions.runBlocking(claw.hingeUp());
 //                    sleep(250);

@@ -34,15 +34,13 @@ public class WalkingJulietteTemp extends LinearOpMode {
 
                 // Claw Controls
                 if (gamepad2.a && gamepad2.a != verticalClawPrev) {
-                    if (juliette.getVerticalClawPosition() == 1) {
-                        juliette.closeVerticalClaw();
-                    } else juliette.openVerticalClaw();
+                    if (juliette.getVerticalClawPosition() == 1) juliette.closeVerticalClaw();
+                    else juliette.openVerticalClaw();
                 }
 
                 if (gamepad2.b && gamepad2.b != horizontalClawPrev) {
-                    if (juliette.getHorizontalClawPosition() == 1) {
-                        juliette.closeHorizontalClaw();
-                    } else juliette.openHorizontalClaw();
+                    if (juliette.getHorizontalClawPosition() == 1) juliette.closeHorizontalClaw();
+                    else juliette.openHorizontalClaw();
                 }
 
                 // Wrist Controls

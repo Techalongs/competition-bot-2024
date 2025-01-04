@@ -178,11 +178,11 @@ public class Robot extends MecanumDrivetrain {
         telemetry.addData("Extension Power", getExtensionPower());
         telemetry.addData("Arm Position", getArmPosition());
         telemetry.addData("Extension Position", getExtensionPosition());
-        telemetry.addData("Horizontal Claw Position", getHorizontalClawPosition());
+        telemetry.addData("Horizontal VerticalClaw Position", getHorizontalClawPosition());
         telemetry.addData("Horizontal Wrist Position", getHorizontalWristPosition());
-        telemetry.addData("Horizontal Claw Hinge Position", getHorizontalHingePosition());
-        telemetry.addData("Vertical Claw Position", getVerticalClawPosition());
-        telemetry.addData("Vertical Claw Hinge Position", getVerticalHingePosition());
+        telemetry.addData("Horizontal VerticalClaw Hinge Position", getHorizontalHingePosition());
+        telemetry.addData("Vertical VerticalClaw Position", getVerticalClawPosition());
+        telemetry.addData("Vertical VerticalClaw Hinge Position", getVerticalHingePosition());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));
