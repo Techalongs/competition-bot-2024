@@ -19,14 +19,23 @@ public class MeepMeepTesting {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-16, 64, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-5, 32))
-                .strafeTo(new Vector2d(-30, 40))
+                .strafeTo(new Vector2d(3, 32))
+                .strafeTo(new Vector2d(-30, 43))
                 .splineToConstantHeading(new Vector2d(-45, 10), Math.toRadians(180))
-                .strafeTo(new Vector2d(-45, 58))
-                .strafeTo(new Vector2d(-5, 32))
-                .strafeTo(new Vector2d(-30, 40))
+                .strafeTo(new Vector2d(-45, 56.5))
+                .strafeTo(new Vector2d(2, 32))
+                .strafeTo(new Vector2d(-30, 43))
                 .splineToConstantHeading(new Vector2d(-55, 10), Math.toRadians(180))
-                .strafeTo(new Vector2d(-55, 57))
+                .strafeTo(new Vector2d(-55, 56.5))
+                .strafeTo(new Vector2d(1, 32))
+                .strafeTo(new Vector2d(-30, 43))
+                .splineToConstantHeading(new Vector2d(-60, 10), Math.toRadians(180))
+                .strafeTo(new Vector2d(-61, 56.5))
+                .strafeTo(new Vector2d(1, 32))
+                .strafeTo(new Vector2d(-45, 56.5
+                ))
+                .strafeTo(new Vector2d(0, 32))
+                .strafeTo(new Vector2d(-45, 57))
                 .build());
 
 

@@ -65,23 +65,27 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void openHorizontalClaw() {
-        horizontalClaw.setPosition(1);
+        horizontalClaw.setPosition(0.65); // Full open - 0, 0.35
     }
 
     public void loosenHorizontalClaw() {
-        horizontalClaw.setPosition(0.05);
+        horizontalClaw.setPosition(0.82); // 0.5
     }
 
     public void closeHorizontalClaw() {
-        horizontalClaw.setPosition(0);
+        horizontalClaw.setPosition(0.85); // 0.55
     }
 
     public void horizontalWristUp() {
         horizontalWrist.setPosition(1);
     }
 
+    public void horizontalWristMid() {
+        horizontalWrist.setPosition(0.8); // Previous Down
+    }
+
     public void horizontalWristDown() {
-        horizontalWrist.setPosition(0.85);
+        horizontalWrist.setPosition(0.55);
     }
 
     public void horizontalHingeUp() {
@@ -89,15 +93,15 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalHingeMid() {
-        horizontalClawHinge.setPosition(0.75);
+        horizontalClawHinge.setPosition(0.39);
     }
 
     public void horizontalHingeDown() {
-        horizontalClawHinge.setPosition(1);
+        horizontalClawHinge.setPosition(0.5);
     }
 
     public void openVerticalClaw() {
-        verticalClaw.setPosition(1);
+        verticalClaw.setPosition(0.57);
     }
 
     public void closeVerticalClaw() {
@@ -113,7 +117,7 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void verticalHingeDown() {
-        verticalClawHinge.setPosition(0);
+        verticalClawHinge.setPosition(0.07);
     }
 
     public double getArmPower() {
@@ -178,11 +182,11 @@ public class Robot extends MecanumDrivetrain {
         telemetry.addData("Extension Power", getExtensionPower());
         telemetry.addData("Arm Position", getArmPosition());
         telemetry.addData("Extension Position", getExtensionPosition());
-        telemetry.addData("Horizontal VerticalClaw Position", getHorizontalClawPosition());
+        telemetry.addData("Horizontal Position", getHorizontalClawPosition());
         telemetry.addData("Horizontal Wrist Position", getHorizontalWristPosition());
-        telemetry.addData("Horizontal VerticalClaw Hinge Position", getHorizontalHingePosition());
-        telemetry.addData("Vertical VerticalClaw Position", getVerticalClawPosition());
-        telemetry.addData("Vertical VerticalClaw Hinge Position", getVerticalHingePosition());
+        telemetry.addData("Horizontal Hinge Position", getHorizontalHingePosition());
+        telemetry.addData("Vertical Position", getVerticalClawPosition());
+        telemetry.addData("Vertical Hinge Position", getVerticalHingePosition());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));
