@@ -48,7 +48,7 @@ public class WalkingJuliette extends LinearOpMode {
 //                            new SequentialAction(
 //                                    claw.hingeUp(),
 //                                    extension.hingePIDControl(Extension.HingePosition.BOTTOM),
-//                                    extension.extensionPIDControl(Extension.ExtensionPosition.PICKUP),
+//                                    extension.extensionPIDControl(Extension.ExtensionPosition.MID),
 //                                    claw.openClaw(),
 //                                    sleepAction(100),
 //                                    claw.hingeDown()

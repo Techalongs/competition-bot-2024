@@ -12,9 +12,9 @@ public class HorizontalClaw {
     private final Servo hinge;
 
     public enum Position {
-        OPEN(0),
-        LOOSE(0.45),
-        CLOSE(0.48);
+        OPEN(0.65),
+        LOOSE(0.85),
+        CLOSE(0.87);
 
         private final double pos;
 
@@ -24,8 +24,9 @@ public class HorizontalClaw {
     }
 
     public enum WristPosition {
-        UP(1),
-        DOWN(0.85);
+        UP(0.97),
+        MID(0.8),
+        DOWN(0.55);
 
         private final double pos;
 
@@ -36,8 +37,8 @@ public class HorizontalClaw {
 
     public enum HingePosition {
         UP(0),
-        PICKUP(0.7),
-        DOWN(1);
+        MID(0.39),
+        DOWN(0.7);
 
         private final double pos;
 
@@ -75,16 +76,9 @@ public class HorizontalClaw {
         };
     }
 
-    public Action wristUp() {
+    public Action wristTo(WristPosition pos) {
         return telemetryPacket -> {
-            wrist.setPosition(WristPosition.UP.pos);
-            return false;
-        };
-    }
-
-    public Action wristDown() {
-        return telemetryPacket -> {
-            wrist.setPosition(WristPosition.DOWN.pos);
+            wrist.setPosition(pos.pos);
             return false;
         };
     }

@@ -69,15 +69,15 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void loosenHorizontalClaw() {
-        horizontalClaw.setPosition(0.82); // 0.5
+        horizontalClaw.setPosition(0.85); // 0.82
     }
 
     public void closeHorizontalClaw() {
-        horizontalClaw.setPosition(0.85); // 0.55
+        horizontalClaw.setPosition(0.87); // 0.85
     }
 
     public void horizontalWristUp() {
-        horizontalWrist.setPosition(1);
+        horizontalWrist.setPosition(0.97);
     }
 
     public void horizontalWristMid() {
@@ -97,7 +97,7 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalHingeDown() {
-        horizontalClawHinge.setPosition(0.5);
+        horizontalClawHinge.setPosition(0.7);
     }
 
     public void openVerticalClaw() {
@@ -117,7 +117,7 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void verticalHingeDown() {
-        verticalClawHinge.setPosition(0.07);
+        verticalClawHinge.setPosition(0.09); // TODO
     }
 
     public double getArmPower() {

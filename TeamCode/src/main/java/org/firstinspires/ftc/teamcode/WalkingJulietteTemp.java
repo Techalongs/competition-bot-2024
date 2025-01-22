@@ -10,11 +10,14 @@ public class WalkingJulietteTemp extends LinearOpMode {
         Robot juliette = new Robot(hardwareMap, telemetry);
         juliette.init();
 
-        boolean verticalClawPrev = gamepad2.a;
+        boolean verticalClawPrev = false;
+        // boolean verticalClawChanged = false;
         boolean horizontalClawPrev = gamepad2.b;
         boolean horizontalWristPrev = gamepad2.right_trigger > 0.5;
         boolean verticalHingePrev = gamepad2.x;
         boolean horizontalHingePrev = gamepad2.y;
+
+        boolean verticalClawCurrent = false;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -22,10 +25,12 @@ public class WalkingJulietteTemp extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (opModeIsActive()) {
+                verticalClawCurrent = gamepad2.a;
+
                 // Drivetrain controls
                 if (gamepad1.right_bumper) juliette.drive(1, gamepad1); // Standard - 0.84
                 else if (gamepad1.left_bumper) juliette.drive(0.7, gamepad1); // Standard - 0.4
-                else juliette.drive(0.9, gamepad1);
+                else juliette.drive(0.9, gamepad1); // May make slower
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
                 // Arm and Extension Controls
@@ -33,21 +38,21 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 juliette.moveExtension(gamepad2.right_stick_y);
 
                 // Claw Controls
-                if (gamepad2.a && gamepad2.a != verticalClawPrev) {
+                if (verticalClawCurrent && verticalClawCurrent != verticalClawPrev) {
                     if (juliette.getVerticalClawPosition() == 0.57) juliette.closeVerticalClaw();
                     else juliette.openVerticalClaw();
                 }
 
                 if (gamepad1.b) juliette.closeHorizontalClaw();
                 if (gamepad2.b && gamepad2.b != horizontalClawPrev) {
-                    if (juliette.getHorizontalClawPosition() == 0.85) juliette.openHorizontalClaw();
+                    if (juliette.getHorizontalClawPosition() == 0.87) juliette.openHorizontalClaw();
                     else juliette.closeHorizontalClaw();
                 }
 
                 // Wrist Controls
                 if (gamepad2.right_trigger > 0.5 & (gamepad2.right_bumper || gamepad2.left_bumper)) juliette.horizontalWristMid();
                 else if (gamepad2.right_trigger > 0.5 && gamepad2.right_trigger > 0.5 != horizontalWristPrev) {
-                    if (juliette.getHorizontalWristPosition() == 1) juliette.horizontalWristDown();
+                    if (juliette.getHorizontalWristPosition() == 0.97) juliette.horizontalWristDown();
                     else juliette.horizontalWristUp();
                 }
 
@@ -60,9 +65,9 @@ public class WalkingJulietteTemp extends LinearOpMode {
                     juliette.drive(0, gamepad1);
                     juliette.closeVerticalClaw();
                     sleep(500);
-                    if (juliette.getVerticalHingePosition() == 0.07) {
-                        juliette.verticalHingeUp();
-                    } else juliette.verticalHingeDown();
+                    if (juliette.getVerticalHingePosition() == 0.5) {
+                        juliette.verticalHingeDown();
+                    } else juliette.verticalHingeUp();
                 }
 
                 if (gamepad2.y && (gamepad2.right_bumper || gamepad2.left_bumper)) juliette.horizontalHingeMid();
@@ -108,13 +113,14 @@ public class WalkingJulietteTemp extends LinearOpMode {
                     juliette.verticalHingeMid();
                 }
 
-                verticalClawPrev = gamepad2.a;
+                verticalClawPrev = verticalClawCurrent;
                 horizontalClawPrev = gamepad2.b;
                 horizontalWristPrev = gamepad2.right_trigger > 0.5;
                 verticalHingePrev = gamepad2.x;
                 horizontalHingePrev = gamepad2.y;
 
                 juliette.addData("Vertical Claw Prev", String.valueOf(verticalClawPrev));
+                // juliette.addData("Vertical Claw Changed", String.valueOf(verticalClawChanged));
                 juliette.addData("Horizontal Claw Prev", String.valueOf(horizontalClawPrev));
                 juliette.addData("Horizontal Wrist Prev", String.valueOf(horizontalWristPrev));
                 juliette.addData("Vertical Hinge Prev", String.valueOf(verticalHingePrev));
