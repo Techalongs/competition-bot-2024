@@ -24,9 +24,9 @@ public class HorizontalClaw {
     }
 
     public enum WristPosition {
-        UP(0.97),
-        MID(0.8),
-        DOWN(0.55);
+        UP(0.9),
+        MID(0.73),
+        DOWN(0.47);
 
         private final double pos;
 

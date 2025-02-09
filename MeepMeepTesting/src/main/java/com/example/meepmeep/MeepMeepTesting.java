@@ -45,10 +45,12 @@ public class MeepMeepTesting {
 //                .splineToConstantHeading(new Vector2d(-45, 10), Math.toRadians(180))
 //                .strafeTo(new Vector2d(-45, 53))
 //                .strafeTo(new Vector2d(-45, 10))
-//                .splineToConstantHeading(new Vector2d(-55, 53), Math.toRadians(90))
 //                .strafeTo(new Vector2d(-55, 10))
-//                .splineToConstantHeading(new Vector2d(-61, 53), Math.toRadians(90))
-//                .strafeTo(new Vector2d(-40, 62.5))
+//                .strafeTo(new Vector2d(-55, 53))
+//                .strafeTo(new Vector2d(-55, 10))
+//                .strafeTo(new Vector2d(-61, 10))
+//                .strafeTo(new Vector2d(-61, 53))
+//                .strafeTo(new Vector2d(-40, 62.5)) // Begin to hang specimens
 //                .strafeTo(new Vector2d(2, 32))
 //                .strafeTo(new Vector2d(-40, 62.5))
 //                .strafeTo(new Vector2d(2, 32))
@@ -59,26 +61,39 @@ public class MeepMeepTesting {
 //                .build());
 
         // SAMPLE
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(10, 64, Math.toRadians(270)))
-                .strafeTo(new Vector2d(3, 32))
-                .strafeTo(new Vector2d(58, 48))
-                .turn(Math.toRadians(-45))
-                .turn(Math.toRadians(45))
-                .strafeTo(new Vector2d(45, 30))
-                .strafeTo(new Vector2d(58, 48))
-                .turn(Math.toRadians(-45))
-                .turn(Math.toRadians(45))
-                .strafeTo(new Vector2d(57, 30))
-                .strafeTo(new Vector2d(58, 48))
-                .turn(Math.toRadians(-45))
-                .turn(Math.toRadians(45))
-                .strafeTo(new Vector2d(61, 30))
-                .strafeTo(new Vector2d(58, 48))
-                .turn(Math.toRadians(-45))
-                .splineTo(new Vector2d(20, 10), Math.toRadians(180))
+//        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(10, 64, Math.toRadians(90)))
+//                .strafeTo(new Vector2d(3, 32))
+//                .strafeTo(new Vector2d(58, 48))
+//                .turn(Math.toRadians(135))
+//                .turn(Math.toRadians(45))
+//                .strafeTo(new Vector2d(45, 30))
+//                .strafeTo(new Vector2d(58, 48))
+//                .turn(Math.toRadians(-45))
+//                .turn(Math.toRadians(45))
+//                .strafeTo(new Vector2d(57, 30))
+//                .strafeTo(new Vector2d(58, 48))
+//                .turn(Math.toRadians(-45))
+//                .turn(Math.toRadians(45))
+//                .strafeTo(new Vector2d(61, 30))
+//                .strafeTo(new Vector2d(58, 48))
+//                .turn(Math.toRadians(-45))
+//                .splineTo(new Vector2d(20, 10), Math.toRadians(180))
+//                .build());
+
+
+        // TESTING
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-16, 64, Math.toRadians(90)))
+                .strafeTo(new Vector2d(1, 64))
+                .strafeTo(new Vector2d(1, 10))
+                .strafeTo(new Vector2d(1, 30))
+                .strafeTo(new Vector2d(-40, 30))
+                .strafeTo(new Vector2d(-40, 64))
+                .strafeTo(new Vector2d(-40, 30))
+                .strafeTo(new Vector2d(0, 30))
+                .strafeTo(new Vector2d(0, 10))
                 .build());
 
-
+        // IDK
         /*
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(11.25, 35.04, Math.toRadians(266.77)))
                 .lineToX(30)

@@ -6,16 +6,19 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class VerticalExtension {
     private final DcMotor extension;
+    private final DigitalChannel bottomArmLimit;
 
     public enum Position {
         BOTTOM(-10),
-        SPECIMEN_1(-700),
-        SPECIMEN_2(-1250),
-        TOP(-3200);
+        PARK(-180),
+        SPECIMEN_1(-320),
+        SPECIMEN_2(-850),
+        TOP(-2600);
 
         private final int ticks;
 
@@ -26,6 +29,7 @@ public class VerticalExtension {
 
     public VerticalExtension(HardwareMap hardwareMap) {
         extension = hardwareMap.get(DcMotor.class, "verticalArm");
+        bottomArmLimit = hardwareMap.get(DigitalChannel.class, "bottomArmLimit");
 
         extension.setDirection(DcMotorSimple.Direction.REVERSE);
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -45,7 +49,14 @@ public class VerticalExtension {
                     init = true;
                 }
 
-                if (extension.isBusy()) {
+                if (pos == Position.BOTTOM) {
+                    if (bottomArmLimit.getState()) {
+                        extension.setPower(1);
+                        return true;
+                    }
+
+                    return false;
+                } else if (extension.isBusy()) {
                     extension.setPower(1);
                     return true;
                 } else {

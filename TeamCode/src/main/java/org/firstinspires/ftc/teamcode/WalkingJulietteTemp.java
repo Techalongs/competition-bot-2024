@@ -34,12 +34,14 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
                 // Arm and Extension Controls
-                juliette.moveArm(gamepad2.left_stick_y);
-                juliette.moveExtension(gamepad2.right_stick_y);
+                juliette.moveArm(-gamepad2.left_stick_y);
+                juliette.moveExtension(-gamepad2.right_stick_y);
+
+                juliette.moveHangArm((gamepad2.dpad_up) ? 1 : (gamepad2.dpad_down) ? -1 : 0);
 
                 // Claw Controls
                 if (verticalClawCurrent && verticalClawCurrent != verticalClawPrev) {
-                    if (juliette.getVerticalClawPosition() == 0.57) juliette.closeVerticalClaw();
+                    if (juliette.getVerticalClawPosition() == 0.55) juliette.closeVerticalClaw();
                     else juliette.openVerticalClaw();
                 }
 
@@ -52,7 +54,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 // Wrist Controls
                 if (gamepad2.right_trigger > 0.5 & (gamepad2.right_bumper || gamepad2.left_bumper)) juliette.horizontalWristMid();
                 else if (gamepad2.right_trigger > 0.5 && gamepad2.right_trigger > 0.5 != horizontalWristPrev) {
-                    if (juliette.getHorizontalWristPosition() == 0.97) juliette.horizontalWristDown();
+                    if (juliette.getHorizontalWristPosition() == 0.9) juliette.horizontalWristDown();
                     else juliette.horizontalWristUp();
                 }
 
@@ -64,10 +66,9 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 } else if (gamepad2.x && gamepad2.x != verticalHingePrev) {
                     juliette.drive(0, gamepad1);
                     juliette.closeVerticalClaw();
-                    sleep(500);
-                    if (juliette.getVerticalHingePosition() == 0.5) {
-                        juliette.verticalHingeDown();
-                    } else juliette.verticalHingeUp();
+                    if (0.02 <= juliette.getVerticalHingePosition() && juliette.getVerticalHingePosition() <= 0.03) {
+                        juliette.verticalHingeUp();
+                    } else juliette.verticalHingeDown();
                 }
 
                 if (gamepad2.y && (gamepad2.right_bumper || gamepad2.left_bumper)) juliette.horizontalHingeMid();
@@ -101,11 +102,26 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.dpad_down) {
                     juliette.drive(0, gamepad1);
 
-                    while (juliette.getExtensionPosition() < 10) {
-                        juliette.moveExtension(1);
+                    while (juliette.getArmPosition() > 10) {
+                        juliette.moveArm(-1);
+                    }
+                    juliette.moveArm(0);
+
+                    while (juliette.getExtensionPosition() > 10) {
+                        juliette.moveExtension(-1);
                     }
                     juliette.moveExtension(0);
 
+                    juliette.horizontalWristDown();
+                    sleep(500);
+                    juliette.closeHorizontalClaw();
+                    sleep(500);
+                    juliette.horizontalWristUp();
+                    sleep(500);
+                    juliette.horizontalWristDown();
+                    sleep(750);
+                    juliette.horizontalWristUp();
+                    sleep(500);
                     juliette.closeVerticalClaw();
                     sleep(500);
                     juliette.openHorizontalClaw();

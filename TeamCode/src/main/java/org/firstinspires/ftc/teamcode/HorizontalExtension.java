@@ -12,7 +12,7 @@ public class HorizontalExtension {
 
     public enum Position {
         BOTTOM(-10),
-        TOP(-1520);
+        TOP(-1500);
 
         private final int ticks;
 

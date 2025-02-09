@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -11,12 +13,15 @@ import java.util.HashMap;
 
 public class Robot extends MecanumDrivetrain {
     private final DcMotor arm;
+    private final DcMotor hangArm;
     private final DcMotor extension;
     private final Servo horizontalClaw;
     private final Servo horizontalWrist;
     private final Servo horizontalClawHinge;
     private final Servo verticalClaw;
     private final Servo verticalClawHinge;
+    private final DigitalChannel bottomArmLimit;
+    private final TouchSensor bottomExtensionLimit;
     private final Telemetry telemetry;
     private final HashMap<String, String> extraData = new HashMap<>();
     private double speed;
@@ -25,12 +30,15 @@ public class Robot extends MecanumDrivetrain {
         super(hardwareMap);
 
         arm = hardwareMap.get(DcMotor.class, "verticalArm");
+        hangArm = hardwareMap.get(DcMotor.class, "hangArm");
         extension = hardwareMap.get(DcMotor.class, "horizontalExtension");
         horizontalClaw = hardwareMap.get(Servo.class, "horizontalClaw");
         horizontalWrist = hardwareMap.get(Servo.class, "horizontalWrist");
         horizontalClawHinge = hardwareMap.get(Servo.class, "horizontalClawHinge");
         verticalClaw = hardwareMap.get(Servo.class, "verticalClaw");
         verticalClawHinge = hardwareMap.get(Servo.class, "verticalClawHinge");
+        bottomArmLimit = hardwareMap.get(DigitalChannel.class, "bottomArmLimit");
+        bottomExtensionLimit = hardwareMap.get(TouchSensor.class, "bottomExtensionLimit");
         this.telemetry = telemetry;
         this.speed = 0.5;
     }
@@ -41,27 +49,47 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void init() {
-        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+        extension.setDirection(DcMotorSimple.Direction.REVERSE);
 
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hangArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hangArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         horizontalClaw.setDirection(Servo.Direction.REVERSE);
     }
 
     public void moveArm(double power) {
-        arm.setPower(power);
+        if ((!isBottomArmLimitPressed() || power > 0) && (arm.getCurrentPosition() < 2400 || power < 0))
+            arm.setPower(power);
+        else arm.setPower(0);
+
+        if (isBottomArmLimitPressed() && arm.getCurrentPosition() > 100) {
+            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 
     public void moveExtension(double power) {
-        if (extension.getCurrentPosition() > -1520 || power > 0) extension.setPower(power);
+        if ((!isBottomExtensionLimitPressed() || power > 0) && (extension.getCurrentPosition() < 1500 || power < 0))
+            extension.setPower(power);
         else extension.setPower(0);
+
+        if (isBottomExtensionLimitPressed() && extension.getCurrentPosition() > 100) {
+            extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    public void moveHangArm(double power) {
+        hangArm.setPower(power);
     }
 
     public void openHorizontalClaw() {
@@ -77,15 +105,15 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalWristUp() {
-        horizontalWrist.setPosition(0.97);
+        horizontalWrist.setPosition(0.9); // TODO
     }
 
     public void horizontalWristMid() {
-        horizontalWrist.setPosition(0.8); // Previous Down
+        horizontalWrist.setPosition(0.73); // Previous Down - TODO
     }
 
     public void horizontalWristDown() {
-        horizontalWrist.setPosition(0.55);
+        horizontalWrist.setPosition(0.47); // TODO
     }
 
     public void horizontalHingeUp() {
@@ -97,11 +125,11 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalHingeDown() {
-        horizontalClawHinge.setPosition(0.7);
+        horizontalClawHinge.setPosition(0.65);
     }
 
     public void openVerticalClaw() {
-        verticalClaw.setPosition(0.57);
+        verticalClaw.setPosition(0.55);
     }
 
     public void closeVerticalClaw() {
@@ -109,19 +137,23 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void verticalHingeUp() {
-        verticalClawHinge.setPosition(0.5);
+        verticalClawHinge.setPosition(0.9); // TODO
     }
 
     public void verticalHingeMid() {
-        verticalClawHinge.setPosition(0.35);
+        verticalClawHinge.setPosition(0.35); // TODO
     }
 
     public void verticalHingeDown() {
-        verticalClawHinge.setPosition(0.09); // TODO
+        verticalClawHinge.setPosition(0.03); // TODO
     }
 
     public double getArmPower() {
         return arm.getPower();
+    }
+
+    public double getHangArmPower() {
+        return hangArm.getPower();
     }
 
     public double getExtensionPower() {
@@ -130,6 +162,10 @@ public class Robot extends MecanumDrivetrain {
 
     public int getArmPosition() {
         return arm.getCurrentPosition();
+    }
+
+    public int getHangArmPosition() {
+        return hangArm.getCurrentPosition();
     }
 
     public int getExtensionPosition() {
@@ -156,6 +192,14 @@ public class Robot extends MecanumDrivetrain {
         return verticalClawHinge.getPosition();
     }
 
+    public boolean isBottomArmLimitPressed() {
+        return !bottomArmLimit.getState();
+    }
+
+    public boolean isBottomExtensionLimitPressed() {
+        return bottomExtensionLimit.isPressed();
+    }
+
     public void addData(String caption, double value) {
         addData(caption, String.valueOf(value));
     }
@@ -180,13 +224,17 @@ public class Robot extends MecanumDrivetrain {
         telemetry.addData("Back Right Position", getBRMotorPosition());
         telemetry.addData("Arm Power", getArmPower());
         telemetry.addData("Extension Power", getExtensionPower());
+        telemetry.addData("Arm Hang Power", getHangArmPower());
         telemetry.addData("Arm Position", getArmPosition());
+        telemetry.addData("Arm Hang Position", getHangArmPosition());
         telemetry.addData("Extension Position", getExtensionPosition());
         telemetry.addData("Horizontal Position", getHorizontalClawPosition());
         telemetry.addData("Horizontal Wrist Position", getHorizontalWristPosition());
         telemetry.addData("Horizontal Hinge Position", getHorizontalHingePosition());
         telemetry.addData("Vertical Position", getVerticalClawPosition());
         telemetry.addData("Vertical Hinge Position", getVerticalHingePosition());
+        telemetry.addData("Bottom Arm Limit", isBottomArmLimitPressed());
+        telemetry.addData("Bottom Extension Limit", isBottomExtensionLimitPressed());
 
         for (String caption : extraData.keySet()) {
             telemetry.addData(caption, extraData.get(caption));

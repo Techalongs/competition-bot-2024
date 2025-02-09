@@ -13,7 +13,7 @@ public class VerticalClaw {
     private final Servo hinge;
 
     public enum Position {
-        OPEN(0.57),
+        OPEN(0.55),
         CLOSE(0);
 
         private final double pos;
@@ -24,9 +24,9 @@ public class VerticalClaw {
     }
 
     public enum HingePosition {
-        UP(0.5),
+        UP(0.9),
         SPECIMEN(0.35),
-        DOWN(0.09);
+        DOWN(0);
 
         private final double pos;
 
