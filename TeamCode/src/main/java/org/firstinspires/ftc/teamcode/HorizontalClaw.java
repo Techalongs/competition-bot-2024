@@ -38,7 +38,7 @@ public class HorizontalClaw {
     public enum HingePosition {
         UP(0),
         MID(0.39),
-        DOWN(0.7);
+        DOWN(0.6);
 
         private final double pos;
 

@@ -35,22 +35,28 @@ public class SpecimenAutonomous extends LinearOpMode {
         if (opModeIsActive()) {
             TrajectoryActionBuilder[] trajs = new TrajectoryActionBuilder[10]; // change size
 
+            // To Chamber
             trajs[0] = drive.actionBuilder(new Pose2d(-16, 64, Math.toRadians(90)))
                     .strafeTo(new Vector2d(1, 64))
                     .strafeTo(new Vector2d(1, 10));
 
+            // To Observation Zone
             trajs[1] = drive.actionBuilder(new Pose2d(1, 10, Math.toRadians(90)))
-                    .strafeTo(new Vector2d(1, 30))
-                    .strafeTo(new Vector2d(-55, 30))
-                    .strafeTo(new Vector2d(-55, 64));
+                    .strafeTo(new Vector2d(1, 40))
+                    .strafeTo(new Vector2d(-55, 40))
+                    .turn(Math.toRadians(-5))
+                    .strafeTo(new Vector2d(-55, 75));
 
-            trajs[2] = drive.actionBuilder(new Pose2d(-55, 64, Math.toRadians(90)))
+            // Back up
+            trajs[2] = drive.actionBuilder(new Pose2d(-55, 75, Math.toRadians(90)))
                     .strafeTo(new Vector2d(-55, 55));
 
+            // To Chamber
             trajs[3] = drive.actionBuilder(new Pose2d(-55, 55, Math.toRadians(90)))
                     .strafeTo(new Vector2d(1, 55))
                     .strafeTo(new Vector2d(1, 10));
 
+            // Scoop One Sample
             trajs[4] = drive.actionBuilder(new Pose2d(1, 10, Math.toRadians(90)))
                     .strafeTo(new Vector2d(1, 30))
                     .strafeTo(new Vector2d(-38, 30))
@@ -58,10 +64,16 @@ public class SpecimenAutonomous extends LinearOpMode {
                     .strafeTo(new Vector2d(-53, -10))
                     .strafeTo(new Vector2d(-53, 60));
 
-            trajs[5] = drive.actionBuilder(new Pose2d(-55, 64, Math.toRadians(90)))
+            // trajs[2] & trajs[3]
+            trajs[5] = drive.actionBuilder(new Pose2d(-55, 75, Math.toRadians(90)))
                     .strafeTo(new Vector2d(-55, 55))
                     .strafeTo(new Vector2d(1, 55))
                     .strafeTo(new Vector2d(1, 10));
+
+            // Final travel to Observation Zone
+            trajs[6] = drive.actionBuilder(new Pose2d(1, 10, Math.toRadians(90)))
+                    .strafeTo(new Vector2d(1, 40))
+                    .strafeTo(new Vector2d(-55, 75));
 
             Actions.runBlocking(
                     new SequentialAction(
@@ -117,14 +129,14 @@ public class SpecimenAutonomous extends LinearOpMode {
                                     trajs[3].build(),
                                     verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
                                     extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
-                            ),
+                            ), // Comment to here
                             new SleepAction(0.5),
                             extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
                             verticalClaw.open(),
                             extension.moveTo(VerticalExtension.Position.SPECIMEN_1),
                             verticalClaw.close(),
                             new ParallelAction(
-                                    trajs[1].build(),
+                                    trajs[6].build(),
                                     verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN),
                                     extension.moveTo(VerticalExtension.Position.BOTTOM),
                                     horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),

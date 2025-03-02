@@ -26,7 +26,7 @@ public class VerticalClaw {
     public enum HingePosition {
         UP(0.9),
         SPECIMEN(0.35),
-        DOWN(0);
+        DOWN(0.03);
 
         private final double pos;
 

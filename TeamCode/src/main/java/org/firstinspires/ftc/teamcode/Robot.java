@@ -50,6 +50,7 @@ public class Robot extends MecanumDrivetrain {
 
     public void init() {
         extension.setDirection(DcMotorSimple.Direction.REVERSE);
+        // hangArm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -92,6 +93,19 @@ public class Robot extends MecanumDrivetrain {
         hangArm.setPower(power);
     }
 
+    public boolean moveHangArmTo(int pos) {
+        hangArm.setTargetPosition(pos / 2);
+        hangArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        if (hangArm.getCurrentPosition() > hangArm.getTargetPosition()) {
+            hangArm.setPower(1);
+            return true;
+        } else {
+            hangArm.setPower(0);
+            return false;
+        }
+    }
+
     public void openHorizontalClaw() {
         horizontalClaw.setPosition(0.65); // Full open - 0, 0.35
     }
@@ -125,7 +139,7 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalHingeDown() {
-        horizontalClawHinge.setPosition(0.65);
+        horizontalClawHinge.setPosition(0.6); // TODO
     }
 
     public void openVerticalClaw() {
