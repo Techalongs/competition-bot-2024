@@ -8,6 +8,8 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+
 // MUST TEST - New Bot
 @Autonomous(name = "Parking Specimen Autonomous")
 public class SimpleSpecimen extends LinearOpMode {

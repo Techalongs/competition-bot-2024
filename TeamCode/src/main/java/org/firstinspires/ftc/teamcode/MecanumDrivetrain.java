@@ -12,14 +12,14 @@ public class MecanumDrivetrain {
     private final DcMotor backRight;
 
     public MecanumDrivetrain(HardwareMap hardwareMap) {
-        frontLeft = hardwareMap.get(DcMotor.class, "CH2");
-        frontRight = hardwareMap.get(DcMotor.class, "CH3");
-        backLeft = hardwareMap.get(DcMotor.class, "CH0");
-        backRight = hardwareMap.get(DcMotor.class, "CH1");
+        frontLeft = hardwareMap.get(DcMotor.class, "CH1");
+        frontRight = hardwareMap.get(DcMotor.class, "CH0");
+        backLeft = hardwareMap.get(DcMotor.class, "CH3");
+        backRight = hardwareMap.get(DcMotor.class, "CH2");
 
-        // backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -39,10 +39,10 @@ public class MecanumDrivetrain {
     }
 
     public void drive(double limiter, Gamepad gamepad) {
-        float FLPower = (-gamepad.left_stick_y - gamepad.right_stick_x) + gamepad.left_stick_x;
-        float FRPower = (-gamepad.left_stick_y + gamepad.right_stick_x) - gamepad.left_stick_x;
-        float BLPower = (-gamepad.left_stick_y - gamepad.right_stick_x) - gamepad.left_stick_x;
-        float BRPower = (-gamepad.left_stick_y + gamepad.right_stick_x) + gamepad.left_stick_x;
+        float FLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) + gamepad.left_stick_x;
+        float FRPower = (-gamepad.left_stick_y - gamepad.right_stick_x) - gamepad.left_stick_x;
+        float BLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) - gamepad.left_stick_x;
+        float BRPower = (-gamepad.left_stick_y - gamepad.right_stick_x) + gamepad.left_stick_x;
 
         frontLeft.setPower(FLPower * limiter);
         frontRight.setPower(FRPower * limiter);

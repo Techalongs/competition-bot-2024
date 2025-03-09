@@ -14,6 +14,8 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+
 @Autonomous(name = "Sample W/O Specimen Auto")
 public class SampleWithoutSpecimen extends LinearOpMode {
     @Override
