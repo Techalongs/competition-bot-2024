@@ -43,7 +43,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
 
                 // Claw Controls
                 if (verticalClawCurrent && verticalClawCurrent != verticalClawPrev) {
-                    if (juliette.getVerticalClawPosition() == 0.55) juliette.closeVerticalClaw();
+                    if (juliette.getVerticalClawPosition() == 1) juliette.closeVerticalClaw();
                     else juliette.openVerticalClaw();
                 }
 

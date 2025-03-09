@@ -119,15 +119,15 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalWristUp() {
-        horizontalWrist.setPosition(0.9); // TODO
+        horizontalWrist.setPosition(0.9);
     }
 
     public void horizontalWristMid() {
-        horizontalWrist.setPosition(0.73); // Previous Down - TODO
+        horizontalWrist.setPosition(0.73); // Previous Down
     }
 
     public void horizontalWristDown() {
-        horizontalWrist.setPosition(0.47); // TODO
+        horizontalWrist.setPosition(0.47);
     }
 
     public void horizontalHingeUp() {
@@ -139,27 +139,27 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalHingeDown() {
-        horizontalClawHinge.setPosition(0.6); // TODO
+        horizontalClawHinge.setPosition(0.6);
     }
 
     public void openVerticalClaw() {
-        verticalClaw.setPosition(0.55);
+        verticalClaw.setPosition(1); // TODO
     }
 
     public void closeVerticalClaw() {
-        verticalClaw.setPosition(0);
+        verticalClaw.setPosition(0.43); // TODO
     }
 
     public void verticalHingeUp() {
-        verticalClawHinge.setPosition(0.9); // TODO
+        verticalClawHinge.setPosition(0.9);
     }
 
     public void verticalHingeMid() {
-        verticalClawHinge.setPosition(0.35); // TODO
+        verticalClawHinge.setPosition(0.35);
     }
 
     public void verticalHingeDown() {
-        verticalClawHinge.setPosition(0.03); // TODO
+        verticalClawHinge.setPosition(0.03);
     }
 
     public double getArmPower() {

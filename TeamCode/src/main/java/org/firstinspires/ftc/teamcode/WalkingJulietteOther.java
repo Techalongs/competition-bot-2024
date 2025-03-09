@@ -44,7 +44,7 @@ public class WalkingJulietteOther extends LinearOpMode {
 
                 // Claw Controls
                 if (verticalClawCurrent && verticalClawCurrent != verticalClawPrev) {
-                    if (juliette.getVerticalClawPosition() == 0.55) juliette.closeVerticalClaw();
+                    if (juliette.getVerticalClawPosition() == 1) juliette.closeVerticalClaw();
                     else juliette.openVerticalClaw();
                 }
 
@@ -69,6 +69,7 @@ public class WalkingJulietteOther extends LinearOpMode {
                 } else if (gamepad2.square && gamepad2.square != verticalHingePrev) {
                     juliette.drive(0, gamepad1);
                     juliette.closeVerticalClaw();
+                    sleep(250);
                     if (0.02 <= juliette.getVerticalHingePosition() && juliette.getVerticalHingePosition() <= 0.03) {
                         juliette.verticalHingeUp();
                     } else juliette.verticalHingeDown();
