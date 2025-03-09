@@ -12,12 +12,15 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name = "Sample W/O Specimen Auto")
-public class SampleWithoutSpecimen extends LinearOpMode {
+@Autonomous(name = "Roadrunner Sample W/O Specimen Auto")
+@Disabled
+@Deprecated
+public class RoadrunnerSampleWithoutSpecimen extends LinearOpMode {
     @Override
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(10, 64, Math.toRadians(270)));

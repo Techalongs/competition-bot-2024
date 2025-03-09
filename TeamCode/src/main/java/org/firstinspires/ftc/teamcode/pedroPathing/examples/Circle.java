@@ -63,12 +63,6 @@ public class Circle extends OpMode {
                             + ", starting on the right-most edge. So, make sure you have enough "
                             + "space to the left, front, and back to run the OpMode.");
         telemetryA.update();
-
-        try {
-            Pinpoint.calibratePinpoint(hardwareMap, telemetry, "pinpoint");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
