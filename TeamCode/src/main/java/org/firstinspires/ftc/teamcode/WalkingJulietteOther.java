@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -57,7 +56,7 @@ public class WalkingJulietteOther extends LinearOpMode {
                 // Wrist Controls
                 if (gamepad2.right_trigger > 0.5 & (gamepad2.right_bumper || gamepad2.left_bumper)) juliette.horizontalWristMid();
                 else if (gamepad2.right_trigger > 0.5 && gamepad2.right_trigger > 0.5 != horizontalWristPrev) {
-                    if (juliette.getHorizontalWristPosition() == 0.9) juliette.horizontalWristDown();
+                    if (juliette.getHorizontalWristPosition() == 0.87) juliette.horizontalWristDown();
                     else juliette.horizontalWristUp();
                 }
 
