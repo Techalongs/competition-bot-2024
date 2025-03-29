@@ -14,7 +14,7 @@ public class HorizontalClaw {
     public enum Position {
         OPEN(0.65),
         LOOSE(0.85),
-        CLOSE(0.87);
+        CLOSE(0.9);
 
         private final double pos;
 
@@ -24,7 +24,7 @@ public class HorizontalClaw {
     }
 
     public enum WristPosition {
-        UP(0.9),
+        UP(0.86),
         MID(0.73),
         DOWN(0.47);
 
@@ -38,7 +38,7 @@ public class HorizontalClaw {
     public enum HingePosition {
         UP(0),
         MID(0.39),
-        DOWN(0.6);
+        DOWN(1);
 
         private final double pos;
 
