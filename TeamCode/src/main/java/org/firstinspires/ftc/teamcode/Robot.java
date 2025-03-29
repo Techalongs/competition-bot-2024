@@ -24,7 +24,6 @@ public class Robot extends MecanumDrivetrain {
     private final TouchSensor bottomExtensionLimit;
     private final Telemetry telemetry;
     private final HashMap<String, String> extraData = new HashMap<>();
-    private double speed;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
@@ -40,12 +39,6 @@ public class Robot extends MecanumDrivetrain {
         bottomArmLimit = hardwareMap.get(DigitalChannel.class, "bottomArmLimit");
         bottomExtensionLimit = hardwareMap.get(TouchSensor.class, "bottomExtensionLimit");
         this.telemetry = telemetry;
-        this.speed = 0.5;
-    }
-
-    public Robot(HardwareMap hardwareMap, Telemetry telemetry, double speed) {
-        this(hardwareMap, telemetry);
-        this.speed = speed;
     }
 
     public void init() {
@@ -116,10 +109,10 @@ public class Robot extends MecanumDrivetrain {
 
     public void closeHorizontalClaw() {
         horizontalClaw.setPosition(0.9); // 0.85
-    } // TODO
+    }
 
     public void horizontalWristUp() {
-        horizontalWrist.setPosition(0.86); // TODO
+        horizontalWrist.setPosition(0.86);
     }
 
     public void horizontalWristMid() {
@@ -139,15 +132,15 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void horizontalHingeDown() {
-        horizontalClawHinge.setPosition(1); // TODO
+        horizontalClawHinge.setPosition(1);
     }
 
     public void openVerticalClaw() {
-        verticalClaw.setPosition(1); // TODO
+        verticalClaw.setPosition(1);
     }
 
     public void closeVerticalClaw() {
-        verticalClaw.setPosition(0.43); // TODO
+        verticalClaw.setPosition(0.43);
     }
 
     public void verticalHingeUp() {
@@ -216,10 +209,6 @@ public class Robot extends MecanumDrivetrain {
 
     public void addData(String caption, double value) {
         addData(caption, String.valueOf(value));
-    }
-
-    public void changeSpeed(double speed) {
-        this.speed = speed;
     }
 
     public void addData(String caption, String value) {
