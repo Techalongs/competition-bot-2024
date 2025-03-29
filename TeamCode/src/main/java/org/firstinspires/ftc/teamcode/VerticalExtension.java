@@ -16,8 +16,8 @@ public class VerticalExtension {
     public enum Position {
         BOTTOM(-10),
         PARK(-190),
-        SPECIMEN_1(-320),
-        SPECIMEN_2(-850),
+        SPECIMEN_1(-150),
+        SPECIMEN_2(-650),
         TOP(-2600);
 
         private final int ticks;

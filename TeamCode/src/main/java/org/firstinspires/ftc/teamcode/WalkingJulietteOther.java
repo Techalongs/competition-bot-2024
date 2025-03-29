@@ -49,14 +49,14 @@ public class WalkingJulietteOther extends LinearOpMode {
 
                 if (gamepad1.circle) juliette.closeHorizontalClaw();
                 if (gamepad2.circle && gamepad2.circle != horizontalClawPrev) {
-                    if (juliette.getHorizontalClawPosition() == 0.87) juliette.openHorizontalClaw();
+                    if (juliette.getHorizontalClawPosition() == 0.9) juliette.openHorizontalClaw();
                     else juliette.closeHorizontalClaw();
                 }
 
                 // Wrist Controls
                 if (gamepad2.right_trigger > 0.5 & (gamepad2.right_bumper || gamepad2.left_bumper)) juliette.horizontalWristMid();
                 else if (gamepad2.right_trigger > 0.5 && gamepad2.right_trigger > 0.5 != horizontalWristPrev) {
-                    if (juliette.getHorizontalWristPosition() == 0.87) juliette.horizontalWristDown();
+                    if (juliette.getHorizontalWristPosition() == 0.86) juliette.horizontalWristDown();
                     else juliette.horizontalWristUp();
                 }
 
@@ -76,7 +76,7 @@ public class WalkingJulietteOther extends LinearOpMode {
 
                 if (gamepad2.triangle && (gamepad2.right_bumper || gamepad2.left_bumper)) juliette.horizontalHingeMid();
                 else if (gamepad2.triangle && gamepad2.triangle != horizontalHingePrev) {
-                    if (juliette.getHorizontalHingePosition() == 0) juliette.horizontalHingeDown();
+                    if (juliette.getHorizontalHingePosition() == 0.5) juliette.horizontalHingeDown();
                     else {
                         juliette.drive(0, gamepad1);
                         juliette.loosenHorizontalClaw();
