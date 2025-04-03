@@ -13,7 +13,7 @@ public class VerticalClaw {
     private final Servo hinge;
 
     public enum Position {
-        OPEN(1),
+        OPEN(0.9),
         CLOSE(0.43);
 
         private final double pos;
