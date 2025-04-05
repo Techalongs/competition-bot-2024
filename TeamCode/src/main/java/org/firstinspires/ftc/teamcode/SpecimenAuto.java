@@ -81,17 +81,6 @@ public class SpecimenAuto extends OpMode {
     private void buildPaths() {
         paths = new PathChain[4];
 
-        Action handoff =
-                new SequentialAction(
-                    horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
-                    new SleepAction(0.25),
-                    horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
-                    new SleepAction(0.25),
-                    verticalClaw.close(),
-                    new SleepAction(0.25),
-                    horizontalClaw.open()
-                );
-
         /* Note: Line _ corresponds to lines generated on https://pedro-path-generator.vercel.app/
          * File for this Auto is /Downloads/SpecimenAutoTraj2025.txt
          */
@@ -113,7 +102,7 @@ public class SpecimenAuto extends OpMode {
                         new BezierCurve(
                                 new Point(41.000, 72.000, Point.CARTESIAN),
                                 new Point(1.000, 23.000, Point.CARTESIAN),
-                                new Point(83.000, 42.000, Point.CARTESIAN),
+                                new Point(80.000, 42.000, Point.CARTESIAN),
                                 new Point(58.000, 25.000, Point.CARTESIAN)
                         )
                 )
@@ -147,8 +136,8 @@ public class SpecimenAuto extends OpMode {
                         // Line 8
                         new BezierCurve(
                                 new Point(30.000, 15.000, Point.CARTESIAN),
-                                new Point(45.000, 17.000, Point.CARTESIAN),
-                                new Point(8.000, 25.000, Point.CARTESIAN)
+                                new Point(47.000, 17.000, Point.CARTESIAN),
+                                new Point(8.000, 28.000, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
@@ -163,7 +152,6 @@ public class SpecimenAuto extends OpMode {
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addTemporalCallback(100, getRunnable(handoff))
                 .build();
 
         paths[3] = follower.pathBuilder()
@@ -200,7 +188,20 @@ public class SpecimenAuto extends OpMode {
                 new SequentialAction(
                         horizontalClaw.close(),
                         verticalClaw.open(),
+                        new SleepAction(0.25),
                         horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP)
+                );
+
+        Action handoff =
+                new SequentialAction(
+                        new SleepAction(1),
+                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
+                        new SleepAction(1),
+                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        new SleepAction(0.5),
+                        verticalClaw.close(),
+                        new SleepAction(0.5),
+                        horizontalClaw.open()
                 );
 
         switch (pathState) {
@@ -216,23 +217,22 @@ public class SpecimenAuto extends OpMode {
                     break;
                 }
             case 2: // Goes to chamber
+            case 4:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(pickupSpecimen);
                     follower.followPath(paths[2]);
-                    setPathState(3);
+                    Actions.runBlocking(handoff);
+                    setPathState(pathState + 1);
                     break;
                 }
-            case 3:
+            case 3: // Goes back to collect next specimen
+            case 5:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(scoreSpecimen);
                     follower.followPath(paths[3]);
-                    setPathState(-1);
+                    setPathState((pathState == 3) ? 4 : -1);
                     break;
                 }
         }
-    }
-
-    private Runnable getRunnable(Action a) {
-        return () -> Actions.runBlocking(a);
     }
 }

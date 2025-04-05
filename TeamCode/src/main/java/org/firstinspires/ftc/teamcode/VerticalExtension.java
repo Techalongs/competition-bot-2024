@@ -17,7 +17,7 @@ public class VerticalExtension {
         BOTTOM(-10),
         PARK(-190),
         SPECIMEN_1(-150),
-        SPECIMEN_2(-750),
+        SPECIMEN_2(-800),
         TOP(-2600);
 
         private final int ticks;
