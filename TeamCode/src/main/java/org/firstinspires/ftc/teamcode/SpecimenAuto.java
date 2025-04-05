@@ -116,27 +116,10 @@ public class SpecimenAuto extends OpMode {
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath(
-                        // Line 4
-                        new BezierCurve(
-                                new Point(30.000, 25.000, Point.CARTESIAN),
-                                new Point(68.000, 30.000, Point.CARTESIAN),
-                                new Point(58.000, 15.000, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(
-                        // Line 5
-                        new BezierLine(
-                                new Point(58.000, 15.000, Point.CARTESIAN),
-                                new Point(30.000, 15.000, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(
                         // Line 8
                         new BezierCurve(
-                                new Point(30.000, 15.000, Point.CARTESIAN),
-                                new Point(47.000, 17.000, Point.CARTESIAN),
+                                new Point(30.000, 25.000, Point.CARTESIAN),
+                                new Point(45.000, 17.000, Point.CARTESIAN),
                                 new Point(8.000, 28.000, Point.CARTESIAN)
                         )
                 )
@@ -169,11 +152,10 @@ public class SpecimenAuto extends OpMode {
     private void autonomousPathUpdate() {
         Action scoreSpecimen =
                 new SequentialAction(
-                    horizontalClaw.open(),
                     verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                    new SleepAction(0.5),
+                    new SleepAction(0.3),
                     extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
-                    new SleepAction(0.5),
+                    new SleepAction(0.25),
                     verticalClaw.open(),
                     extension.moveTo(VerticalExtension.Position.SPECIMEN_1),
                     verticalClaw.close(),
