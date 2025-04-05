@@ -26,6 +26,7 @@ android {
 repositories {
     maven {
         url = 'https://maven.brott.dev'
+        url "https://repo.dairy.foundation/releases"
     }
 }
 
@@ -35,6 +36,7 @@ dependencies {
     implementation "com.acmerobotics.roadrunner:core:1.0.0"
     implementation "com.acmerobotics.roadrunner:actions:1.0.0"
     implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
-    implementation 'org.ftclib.ftclib:core:2.1.1' // core
+    implementation "org.solverslib:core:0.2.5" // Current FTCLib fork
+    implementation "org.solverslib:pedroPathing:0.2.5" // Pedro Pathing support
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.16'
 }
