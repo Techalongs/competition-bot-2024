@@ -39,17 +39,17 @@ public class ButtonOpMode extends LinearOpMode {
         // TODO: Driver closes horizontal claw with circle
         // TODO: THIS NEEDS TO GET THE HORIZONTAL CLAW SUBSYSTEM (NOT INCLUDED)
         // Close horizontal claw (Driver Circle)
-        driverCircleButton.whenPressed(() -> juliette.getHorizontalClaw().closeBlocking());
+//        driverCircleButton.whenPressed(() -> juliette.getHorizontalClaw().closeBlocking());
 
         // TODO: Same but for operator
         // Close/Open horizontal claw (Operator Circle)
-        operatorCircleButton.whenPressed(() -> {
-            if (juliette.getHorizontalClaw().isClawLoose()) {
-                juliette.getHorizontalClaw().openBlocking();
-            } else {
-                juliette.getHorizontalClaw().closeBlocking();
-            }
-        });
+//        operatorCircleButton.whenPressed(() -> {
+//            if (juliette.getHorizontalClaw().isClawLoose()) {
+//                juliette.getHorizontalClaw().openBlocking();
+//            } else {
+//                juliette.getHorizontalClaw().closeBlocking();
+//            }
+//        });
 
         boolean verticalClawPrev = false;
         // boolean verticalClawChanged = false;
