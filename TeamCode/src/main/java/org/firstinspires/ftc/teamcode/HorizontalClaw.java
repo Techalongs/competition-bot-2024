@@ -13,7 +13,7 @@ public class HorizontalClaw {
 
     public enum Position {
         OPEN(0.65),
-        LOOSE(0.82),
+        LOOSE(0.85),
         CLOSE(0.89);
 
         private final double pos;
