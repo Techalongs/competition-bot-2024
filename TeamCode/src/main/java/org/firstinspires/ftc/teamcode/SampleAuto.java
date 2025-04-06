@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
+import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
@@ -68,6 +69,7 @@ public class SampleAuto extends OpMode {
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("t-value", follower.getCurrentTValue());
         telemetry.update();
     }
 
@@ -77,7 +79,7 @@ public class SampleAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[5];
+        paths = new PathChain[8];
 
         /* Note: Line _ corresponds to lines generated on https://pedro-path-generator.vercel.app/
          * File for this Auto is /Downloads/SampleAutoTraj2025.txt
@@ -145,6 +147,40 @@ public class SampleAuto extends OpMode {
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(135))
                 .build();
+
+        paths[5] = follower.pathBuilder()
+                .addPath(
+                        // Line 7
+                        new BezierLine(
+                                new Point(15.000, 126.000, Point.CARTESIAN),
+                                new Point(32.000, 130.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(210))
+                .build();
+
+        paths[6] = follower.pathBuilder()
+                .addPath(
+                        // Line 8
+                        new BezierLine(
+                                new Point(32.000, 130.000, Point.CARTESIAN),
+                                new Point(15.000, 126.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(210), Math.toRadians(135))
+                .build();
+
+        paths[7] = follower.pathBuilder()
+                .addPath(
+                        // Line 9
+                        new BezierCurve(
+                                new Point(16.000, 126.000, Point.CARTESIAN),
+                                new Point(60.000, 120.000, Point.CARTESIAN),
+                                new Point(60.000, 97.000, Point.CARTESIAN)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
     }
 
     private void autonomousPathUpdate() {
@@ -197,6 +233,7 @@ public class SampleAuto extends OpMode {
                 break;
             case 1: // Get sample
             case 3:
+            case 5:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(dropSample);
                     follower.followPath(paths[pathState]);
@@ -206,11 +243,20 @@ public class SampleAuto extends OpMode {
                 }
             case 2: // Go back to bucket
             case 4:
+            case 6:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(pickup);
                     Actions.runBlocking(handoff);
                     follower.followPath(paths[pathState]);
-                    setPathState((pathState == 2) ? 3 : -1);
+                    setPathState((pathState != 6) ? pathState + 1 : 7);
+                    break;
+                }
+            case 7: // Go to park
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(dropSample);
+                    follower.followPath(paths[pathState]);
+                    Actions.runBlocking(extension.moveTo(VerticalExtension.Position.BOTTOM));
+                    setPathState(-1);
                     break;
                 }
         }
