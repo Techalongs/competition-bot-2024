@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.dashboard.canvas.Canvas;
+
+import java.util.Optional;
+
 /**
  * Shared team utilities.
  */
@@ -26,6 +33,22 @@ public class TeamUtils {
      */
     public static double squareInput(double input) {
         return Math.signum(input) * input * input;
+    }
+
+    /**
+     * Runs an action only once even if the action returns true to continue.
+     * Copied from Roadrunner's Actions#runBlocking() source and modified to run once.
+     *
+     * @param a Action to run once
+     */
+    public static void runOnce(Action a) {
+        final FtcDashboard dash = FtcDashboard.getInstance();
+        final Canvas c = new Canvas();
+        a.preview(c);
+        final TelemetryPacket p = new TelemetryPacket();
+        Optional.ofNullable(p.fieldOverlay()).ifPresent(canvas -> canvas.getOperations().addAll(c.getOperations()));
+        a.run(p);
+        dash.sendTelemetryPacket(p);
     }
 
 }

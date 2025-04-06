@@ -35,9 +35,9 @@ public class WalkingJuliette extends LinearOpMode {
         while (opModeIsActive()) {
             if (opModeIsActive()) {
                 // Drivetrain controls
-                if (gamepad1.right_bumper) drivetrain.drive(0.8, gamepad1); // Standard - 0.84
-                else if (gamepad1.left_bumper) drivetrain.drive(0.4, gamepad1); // Standard - 0.4
-                else drivetrain.drive(0.6, gamepad1);
+                if (gamepad1.right_bumper) drivetrain.driveBlocking(gamepad1, 0.8); // Standard - 0.84
+                else if (gamepad1.left_bumper) drivetrain.driveBlocking(gamepad1, 0.4); // Standard - 0.4
+                else drivetrain.driveBlocking(gamepad1, 0.6);
                 // Set normal speed to 0.5 at beginning of new season - for practice
 
 //                // Pickup
