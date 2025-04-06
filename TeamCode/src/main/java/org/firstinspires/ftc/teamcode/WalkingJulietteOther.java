@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 
 @TeleOp(name = "Other Walking Juliette (PS4)")
 public class WalkingJulietteOther extends LinearOpMode {
+
     @Override
     public void runOpMode() {
         Robot juliette = new Robot(hardwareMap, telemetry);
@@ -44,11 +45,11 @@ public class WalkingJulietteOther extends LinearOpMode {
 
                 // Drivetrain controls
                 if (gamepad1.right_bumper)
-                    driveTrainActions = juliette.drive(1, gamepad1); // Standard - 0.84
+                    driveTrainActions = juliette.drivetrain.drive(1, gamepad1); // Standard - 0.84
                 else if (gamepad1.left_bumper)
-                    driveTrainActions = juliette.drive(0.7, gamepad1); // Standard - 0.4
+                    driveTrainActions = juliette.drivetrain.drive(0.7, gamepad1); // Standard - 0.4
                 else
-                    driveTrainActions = juliette.drive(0.9, gamepad1); // May make slower
+                    driveTrainActions = juliette.drivetrain.drive(0.9, gamepad1); // May make slower
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
                 // Arm and Extension Controls
@@ -92,7 +93,7 @@ public class WalkingJulietteOther extends LinearOpMode {
                 } else if (gamepad2.square && gamepad2.square != verticalHingePrev) {
                     verticalClawActions = new SequentialAction(verticalClawActions,
                             new ParallelAction(
-                                    juliette.drive(0,
+                                    juliette.drivetrain.drive(0,
                                             gamepad1),
                                     verticalClaw.close()),
                             new SleepAction(250),
@@ -112,7 +113,7 @@ public class WalkingJulietteOther extends LinearOpMode {
                                     ? horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN)
                                     : new SequentialAction(
                                             new ParallelAction(
-                                                    juliette.drive(0, gamepad1),
+                                                    juliette.drivetrain.drive(0, gamepad1),
                                                     horizontalClaw.loosen(),
                                                     horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP)),
                                             new SleepAction(900),
@@ -129,7 +130,7 @@ public class WalkingJulietteOther extends LinearOpMode {
                 // Driver Automation
                 // TODO: This should all be async as well
                 if (gamepad1.left_trigger > 0.5) {
-                    Actions.runBlocking(juliette.drive(0, gamepad1));
+                    Actions.runBlocking(juliette.drivetrain.drive(0, gamepad1));
 
                     juliette.closeHorizontalClaw();
                     juliette.horizontalHingeUp();
@@ -144,7 +145,7 @@ public class WalkingJulietteOther extends LinearOpMode {
                 }
 
                 if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.dpad_down) {
-                    Actions.runBlocking(juliette.drive(0, gamepad1));
+                    Actions.runBlocking(juliette.drivetrain.drive(0, gamepad1));
 
                     while (juliette.getArmPosition() > 10) {
                         juliette.moveArm(-1);
