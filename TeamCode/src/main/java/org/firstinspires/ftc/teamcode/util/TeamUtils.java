@@ -20,7 +20,7 @@ public class TeamUtils {
      * @param min Minimum value (inclusive)
      * @param max Maximum vale (inclusive)
      * @return Clamped value
-     */
+//     */
     public static double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }

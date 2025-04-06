@@ -7,18 +7,42 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
+import com.seattlesolvers.solverslib.command.button.GamepadButton;
+import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
+
+import java.util.Optional;
 
 @TeleOp(name = "Other Walking Juliette (PS4)")
 public class WalkingJulietteOther extends LinearOpMode {
 
+    private GamepadEx driver;
+    private GamepadEx operator;
+    private GamepadButton driverShareButton;
+    private GamepadButton driverOptionsButton;
+    private CommandScheduler commandScheduler;
+    private Action afterAction;
+
     @Override
     public void runOpMode() {
+        // SolversLib
+        CommandScheduler commandScheduler = CommandScheduler.getInstance();
+        commandScheduler.enable();
+
+        // Gamepads and buttons
+        driver = new GamepadEx(gamepad1);
+        operator = new GamepadEx(gamepad2);
+        driverShareButton = driver.getGamepadButton(GamepadKeys.Button.SHARE);
+        driverOptionsButton = driver.getGamepadButton(GamepadKeys.Button.OPTIONS);
+
         Robot juliette = new Robot(hardwareMap, telemetry);
         juliette.init();
         HorizontalClaw horizontalClaw = new HorizontalClaw(hardwareMap);
         HorizontalExtension horizontalExtension = new HorizontalExtension(hardwareMap);
         VerticalClaw verticalClaw = new VerticalClaw(hardwareMap);
         VerticalArm verticalArm = new VerticalArm(hardwareMap);
+
 
         Action driveTrainActions = new SleepAction(0);
         Action armActions = new SleepAction(0);
@@ -35,12 +59,20 @@ public class WalkingJulietteOther extends LinearOpMode {
         boolean verticalClawCurrent;
         boolean hangArmGoing = false;
 
+        afterAction = verticalClaw.open();
+        driverShareButton.whenPressed(verticalClaw::closeBlocking);
+        driverOptionsButton.whenPressed(() -> afterAction = verticalClaw.open());
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
         while (opModeIsActive()) {
             if (opModeIsActive()) {
+                driver.readButtons();
+                operator.readButtons();
+                commandScheduler.run();
+
                 verticalClawCurrent = gamepad2.cross;
 
                 // Drivetrain controls
@@ -126,6 +158,12 @@ public class WalkingJulietteOther extends LinearOpMode {
                 // per group. I can imagine this would be pretty fragile and prone to errors.
                 Actions.runBlocking(new SequentialAction(driveTrainActions, armActions,
                         verticalClawActions, horizontalClawActions));
+
+                // Testing
+//                SleepAction sleepy = new SleepAction(1);
+//                if (afterAction != null) {
+//                    Actions.runBlocking(new SequentialAction(driveTrainActions, sleepy));
+//                }
 
                 // Driver Automation
                 // TODO: This should all be async as well
