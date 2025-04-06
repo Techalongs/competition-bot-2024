@@ -106,7 +106,7 @@ public class Robot {
     }
 
     public void loosenHorizontalClaw() {
-        horizontalClaw.setPosition(0.82); // 0.82
+        horizontalClaw.setPosition(0.85); // 0.82
     }
 
     public void closeHorizontalClaw() {
