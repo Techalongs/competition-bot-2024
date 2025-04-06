@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.deprecated;
 
 import androidx.annotation.NonNull;
 
@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.HorizontalClaw;
+import org.firstinspires.ftc.teamcode.VerticalClaw;
+import org.firstinspires.ftc.teamcode.VerticalExtension;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name = "Roadrunner Sample W/O Specimen Auto")

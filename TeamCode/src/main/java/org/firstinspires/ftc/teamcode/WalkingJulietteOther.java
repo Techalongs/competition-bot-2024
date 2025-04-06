@@ -2,13 +2,52 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
+import com.seattlesolvers.solverslib.command.button.GamepadButton;
+import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
+
+import java.util.Optional;
 
 @TeleOp(name = "Other Walking Juliette (PS4)")
 public class WalkingJulietteOther extends LinearOpMode {
+
+    private GamepadEx driver;
+    private GamepadEx operator;
+    private GamepadButton driverShareButton;
+    private GamepadButton driverOptionsButton;
+    private CommandScheduler commandScheduler;
+    private Action afterAction;
+
     @Override
     public void runOpMode() {
+        // SolversLib
+        CommandScheduler commandScheduler = CommandScheduler.getInstance();
+        commandScheduler.enable();
+
+        // Gamepads and buttons
+        driver = new GamepadEx(gamepad1);
+        operator = new GamepadEx(gamepad2);
+        driverShareButton = driver.getGamepadButton(GamepadKeys.Button.SHARE);
+        driverOptionsButton = driver.getGamepadButton(GamepadKeys.Button.OPTIONS);
+
         Robot juliette = new Robot(hardwareMap, telemetry);
         juliette.init();
+        HorizontalClaw horizontalClaw = new HorizontalClaw(hardwareMap);
+        HorizontalExtension horizontalExtension = new HorizontalExtension(hardwareMap);
+        VerticalClaw verticalClaw = new VerticalClaw(hardwareMap);
+        VerticalArm verticalArm = new VerticalArm(hardwareMap);
+
+
+        Action driveTrainActions = new SleepAction(0);
+        Action armActions = new SleepAction(0);
+        Action verticalClawActions = new SleepAction(0);
+        Action horizontalClawActions = new SleepAction(0);
 
         boolean verticalClawPrev = false;
         // boolean verticalClawChanged = false;
@@ -20,89 +59,117 @@ public class WalkingJulietteOther extends LinearOpMode {
         boolean verticalClawCurrent;
         boolean hangArmGoing = false;
 
+        afterAction = verticalClaw.open();
+        driverShareButton.whenPressed(verticalClaw::closeBlocking);
+        driverOptionsButton.whenPressed(() -> afterAction = verticalClaw.open());
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
         while (opModeIsActive()) {
             if (opModeIsActive()) {
+                driver.readButtons();
+                operator.readButtons();
+                commandScheduler.run();
+
                 verticalClawCurrent = gamepad2.cross;
 
                 // Drivetrain controls
                 if (gamepad1.right_bumper)
-                    juliette.drive(1, gamepad1); // Standard - 0.84
+                    driveTrainActions = juliette.drivetrain.drive(gamepad1, 1); // Standard - 0.84
                 else if (gamepad1.left_bumper)
-                    juliette.drive(0.7, gamepad1); // Standard - 0.4
+                    driveTrainActions = juliette.drivetrain.drive(gamepad1, 0.7); // Standard - 0.4
                 else
-                    juliette.drive(0.9, gamepad1); // May make slower
+                    driveTrainActions = juliette.drivetrain.drive(gamepad1, 0.9); // May make slower
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
                 // Arm and Extension Controls
-                juliette.moveArm(-gamepad2.left_stick_y);
-                juliette.moveExtension(-gamepad2.right_stick_y);
+                armActions = new ParallelAction(
+                        verticalArm.moveArm(-gamepad2.left_stick_y),
+                        horizontalExtension.move(-gamepad2.right_stick_y));
 
                 if (!hangArmGoing)
                     juliette.moveHangArm((gamepad2.dpad_up) ? 1 : (gamepad2.dpad_down) ? -1 : 0);
 
                 // Claw Controls
                 if (verticalClawCurrent && verticalClawCurrent != verticalClawPrev) {
-                    if (juliette.getVerticalClawPosition() == 0.9)
-                        juliette.closeVerticalClaw();
-                    else
-                        juliette.openVerticalClaw();
+                    verticalClawActions = juliette.getVerticalClawPosition() == 0.9 ? verticalClaw.close()
+                            : verticalClaw.open();
                 }
 
                 if (gamepad1.circle)
-                    juliette.closeHorizontalClaw();
+                    horizontalClawActions = horizontalClaw.close();
                 if (gamepad2.circle && gamepad2.circle != horizontalClawPrev) {
-                    if (juliette.getHorizontalClawPosition() == 0.89)
-                        juliette.openHorizontalClaw();
-                    else
-                        juliette.closeHorizontalClaw();
+                    horizontalClawActions = juliette.getHorizontalClawPosition() == 0.89 ? horizontalClaw.open()
+                            : horizontalClaw.close();
                 }
 
                 // Wrist Controls
                 if (gamepad2.right_trigger > 0.5 & (gamepad2.right_bumper || gamepad2.left_bumper))
-                    juliette.horizontalWristMid();
+                    horizontalClawActions = new SequentialAction(horizontalClawActions,
+                            horizontalClaw.hingeTo(HorizontalClaw.HingePosition.MID));
                 else if (gamepad2.right_trigger > 0.5 && gamepad2.right_trigger > 0.5 != horizontalWristPrev) {
-                    if (juliette.getHorizontalWristPosition() == 0.87)
-                        juliette.horizontalWristDown();
-                    else
-                        juliette.horizontalWristUp();
+                    horizontalClawActions = new SequentialAction(horizontalClawActions,
+                            juliette.getHorizontalWristPosition() == 0.87
+                                    ? horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN)
+                                    : horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP));
                 }
 
                 // Claw Hinge Controls
                 if (gamepad2.square && (gamepad2.right_bumper || gamepad2.left_bumper)) {
-                    juliette.closeVerticalClaw();
-                    sleep(250);
-                    juliette.verticalHingeMid();
+                    verticalClawActions = new SequentialAction(verticalClawActions,
+                            verticalClaw.close(),
+                            new SleepAction(250),
+                            verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN));
                 } else if (gamepad2.square && gamepad2.square != verticalHingePrev) {
-                    juliette.drive(0, gamepad1);
-                    juliette.closeVerticalClaw();
-                    sleep(250);
-                    if (0.02 <= juliette.getVerticalHingePosition() && juliette.getVerticalHingePosition() <= 0.03) {
-                        juliette.verticalHingeUp();
-                    } else
-                        juliette.verticalHingeDown();
+                    verticalClawActions = new SequentialAction(verticalClawActions,
+                            new ParallelAction(
+                                    juliette.drivetrain.drive(gamepad1, 0
+                                    ),
+                                    verticalClaw.close()),
+                            new SleepAction(250),
+                            (0.02 <= juliette.getVerticalHingePosition()
+                                    && juliette.getVerticalHingePosition() <= 0.03)
+                                            ? verticalClaw.hingeTo(VerticalClaw.HingePosition.UP)
+                                            : verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN));
+
                 }
 
                 if (gamepad2.triangle && (gamepad2.right_bumper || gamepad2.left_bumper))
-                    juliette.horizontalHingeMid();
+                    horizontalClawActions = new SequentialAction(horizontalClawActions,
+                            horizontalClaw.hingeTo(HorizontalClaw.HingePosition.MID));
                 else if (gamepad2.triangle && gamepad2.triangle != horizontalHingePrev) {
-                    if (juliette.getHorizontalHingePosition() == 0.5)
-                        juliette.horizontalHingeDown();
-                    else {
-                        juliette.drive(0, gamepad1);
-                        juliette.loosenHorizontalClaw();
-                        juliette.horizontalHingeUp();
-                        sleep(900);
-                        juliette.closeHorizontalClaw();
-                    }
+                    horizontalClawActions = new SequentialAction(horizontalClawActions,
+                            juliette.getHorizontalHingePosition() == 0.5
+                                    ? horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN)
+                                    : new SequentialAction(
+                                            new ParallelAction(
+                                                    juliette.drivetrain.drive(gamepad1, 0),
+                                                    horizontalClaw.loosen(),
+                                                    horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP)),
+                                            new SleepAction(900),
+                                            horizontalClaw.close()));
                 }
 
+                // This is where we run all the actions that were compiled above
+                // TODO: This should really be partitioned out better. Probably have a separate
+                // function
+                // per group. I can imagine this would be pretty fragile and prone to errors.
+                Actions.runBlocking(new SequentialAction(driveTrainActions, armActions,
+                        verticalClawActions, horizontalClawActions));
+
+                // Testing
+//                SleepAction sleepy = new SleepAction(1);
+//                if (afterAction != null) {
+//                    Actions.runBlocking(new SequentialAction(driveTrainActions, sleepy));
+//                }
+
                 // Driver Automation
+                // TODO: This should all be async as well
                 if (gamepad1.left_trigger > 0.5) {
-                    juliette.drive(0, gamepad1);
+                    // TODO: Why is this 0? Commenting this out.
+                    // Actions.runBlocking(juliette.drivetrain.drive(gamepad1, 0));
 
                     juliette.closeHorizontalClaw();
                     juliette.horizontalHingeUp();
@@ -117,7 +184,8 @@ public class WalkingJulietteOther extends LinearOpMode {
                 }
 
                 if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.dpad_down) {
-                    juliette.drive(0, gamepad1);
+                    // TODO: Why is this 0? Commenting this out.
+                    // Actions.runBlocking(juliette.drivetrain.drive(gamepad1, 0));
 
                     while (juliette.getArmPosition() > 10) {
                         juliette.moveArm(-1);
