@@ -156,27 +156,27 @@ public class SampleAuto extends OpMode {
                                 new Point(32.000, 130.000, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(210))
+                .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(205))
                 .build();
 
         paths[6] = follower.pathBuilder()
                 .addPath(
                         // Line 8
                         new BezierLine(
-                                new Point(32.000, 130.000, Point.CARTESIAN),
+                                new Point(35.000, 131.500, Point.CARTESIAN),
                                 new Point(15.000, 126.000, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(210), Math.toRadians(135))
+                .setLinearHeadingInterpolation(Math.toRadians(205), Math.toRadians(135))
                 .build();
 
         paths[7] = follower.pathBuilder()
                 .addPath(
                         // Line 9
                         new BezierCurve(
-                                new Point(16.000, 126.000, Point.CARTESIAN),
+                                new Point(15.000, 126.000, Point.CARTESIAN),
                                 new Point(60.000, 120.000, Point.CARTESIAN),
-                                new Point(60.000, 97.000, Point.CARTESIAN)
+                                new Point(60.000, 95.000, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()
@@ -205,10 +205,10 @@ public class SampleAuto extends OpMode {
 
         Action pickup =
                 new SequentialAction(
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN),
-                        new SleepAction(0.5),
                         horizontalClaw.wristTo(HorizontalClaw.WristPosition.MID),
-                        new SleepAction(0.5),
+                        new SleepAction(0.25),
+                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN),
+                        new SleepAction(0.75),
                         horizontalClaw.close(),
                         new SleepAction(0.5),
                         horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP)
@@ -224,6 +224,12 @@ public class SampleAuto extends OpMode {
                         verticalClaw.close(),
                         new SleepAction(0.5),
                         horizontalClaw.open()
+                );
+
+        Action park =
+                new SequentialAction(
+                        extension.moveTo(VerticalExtension.Position.BOTTOM),
+                        verticalClaw.hingeTo(VerticalClaw.HingePosition.PARK)
                 );
 
         switch (pathState) {
@@ -255,7 +261,7 @@ public class SampleAuto extends OpMode {
                 if (!follower.isBusy()) {
                     Actions.runBlocking(dropSample);
                     follower.followPath(paths[pathState]);
-                    Actions.runBlocking(extension.moveTo(VerticalExtension.Position.BOTTOM));
+                    Actions.runBlocking(park);
                     setPathState(-1);
                     break;
                 }
