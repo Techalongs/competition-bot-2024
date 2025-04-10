@@ -29,9 +29,9 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 verticalClawCurrent = gamepad2.a;
 
                 // Drivetrain controls
-                if (gamepad1.right_bumper) juliette.drive(1, gamepad1); // Standard - 0.84
-                else if (gamepad1.left_bumper) juliette.drive(0.7, gamepad1); // Standard - 0.4
-                else juliette.drive(0.9, gamepad1); // May make slower
+                if (gamepad1.right_bumper) juliette.drivetrain.driveBlocking(gamepad1, 1); // Standard - 0.84
+                else if (gamepad1.left_bumper) juliette.drivetrain.driveBlocking(gamepad1, 0.7); // Standard - 0.4
+                else juliette.drivetrain.driveBlocking(gamepad1, 0.9); // May make slower
                 // Set normal speed to 0.5 at beginning of next season - for practice
 
                 // Arm and Extension Controls
@@ -66,7 +66,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
                     sleep(250);
                     juliette.verticalHingeMid();
                 } else if (gamepad2.x && gamepad2.x != verticalHingePrev) {
-                    juliette.drive(0, gamepad1);
+                    juliette.drivetrain.driveBlocking(gamepad1, 0);
                     juliette.closeVerticalClaw();
                     if (0.02 <= juliette.getVerticalHingePosition() && juliette.getVerticalHingePosition() <= 0.03) {
                         juliette.verticalHingeUp();
@@ -77,7 +77,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 else if (gamepad2.y && gamepad2.y != horizontalHingePrev) {
                     if (juliette.getHorizontalHingePosition() == 0) juliette.horizontalHingeDown();
                     else {
-                        juliette.drive(0, gamepad1);
+                        juliette.drivetrain.driveBlocking(gamepad1, 0);
                         juliette.loosenHorizontalClaw();
                         juliette.horizontalHingeUp();
                         sleep(900);
@@ -87,7 +87,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
 
                 // Driver Automation
                 if (gamepad1.left_trigger > 0.5) {
-                    juliette.drive(0, gamepad1);
+                    juliette.drivetrain.driveBlocking(gamepad1, 0);
 
                     juliette.closeHorizontalClaw();
                     juliette.horizontalHingeUp();
@@ -102,7 +102,7 @@ public class WalkingJulietteTemp extends LinearOpMode {
                 }
 
                 if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.dpad_down) {
-                    juliette.drive(0, gamepad1);
+                    juliette.drivetrain.driveBlocking(gamepad1, 0);
 
                     while (juliette.getArmPosition() > 10) {
                         juliette.moveArm(-1);

@@ -11,7 +11,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.HashMap;
 
-public class Robot extends MecanumDrivetrain {
+public class Robot {
+
+    final MecanumDrivetrain drivetrain;
     private final DcMotor arm;
     private final DcMotor hangArm;
     private final DcMotor extension;
@@ -26,7 +28,7 @@ public class Robot extends MecanumDrivetrain {
     private final HashMap<String, String> extraData = new HashMap<>();
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
-        super(hardwareMap);
+        drivetrain = new MecanumDrivetrain(hardwareMap);
 
         arm = hardwareMap.get(DcMotor.class, "verticalArm");
         hangArm = hardwareMap.get(DcMotor.class, "hangArm");
@@ -217,14 +219,14 @@ public class Robot extends MecanumDrivetrain {
 
     public void displayData() {
         telemetry.addData("Status", "Running");
-        telemetry.addData("Front Left Power", getFLMotorPower());
-        telemetry.addData("Front Right Power", getFRMotorPower());
-        telemetry.addData("Back Left Power", getBLMotorPower());
-        telemetry.addData("Back Right Power", getBRMotorPower());
-        telemetry.addData("Front Left Position", getFLMotorPosition());
-        telemetry.addData("Front Right Position", getFRMotorPosition());
-        telemetry.addData("Back Left Position", getBLMotorPosition());
-        telemetry.addData("Back Right Position", getBRMotorPosition());
+        telemetry.addData("Front Left Power", drivetrain.getFLMotorPower());
+        telemetry.addData("Front Right Power", drivetrain.getFRMotorPower());
+        telemetry.addData("Back Left Power", drivetrain.getBLMotorPower());
+        telemetry.addData("Back Right Power", drivetrain.getBRMotorPower());
+        telemetry.addData("Front Left Position", drivetrain.getFLMotorPosition());
+        telemetry.addData("Front Right Position", drivetrain.getFRMotorPosition());
+        telemetry.addData("Back Left Position", drivetrain.getBLMotorPosition());
+        telemetry.addData("Back Right Position", drivetrain.getBRMotorPosition());
         telemetry.addData("Arm Power", getArmPower());
         telemetry.addData("Extension Power", getExtensionPower());
         telemetry.addData("Arm Hang Power", getHangArmPower());

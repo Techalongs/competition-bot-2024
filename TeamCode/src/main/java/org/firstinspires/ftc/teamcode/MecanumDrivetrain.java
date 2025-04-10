@@ -4,8 +4,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.acmerobotics.roadrunner.Action;
+
+import org.firstinspires.ftc.teamcode.util.TeamUtils;
 
 public class MecanumDrivetrain {
+
     private final DcMotor frontLeft;
     private final DcMotor frontRight;
     private final DcMotor backLeft;
@@ -38,16 +42,24 @@ public class MecanumDrivetrain {
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void drive(double limiter, Gamepad gamepad) {
+    public Action drive(Gamepad gamepad, double limiter) {
         float FLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) + gamepad.left_stick_x;
         float FRPower = (-gamepad.left_stick_y - gamepad.right_stick_x) - gamepad.left_stick_x;
         float BLPower = (-gamepad.left_stick_y + gamepad.right_stick_x) - gamepad.left_stick_x;
         float BRPower = (-gamepad.left_stick_y - gamepad.right_stick_x) + gamepad.left_stick_x;
 
-        frontLeft.setPower(FLPower * limiter);
-        frontRight.setPower(FRPower * limiter);
-        backLeft.setPower(BLPower * limiter);
-        backRight.setPower(BRPower * limiter);
+        return telemetryPacket -> {
+            frontLeft.setPower(FLPower * limiter);
+            frontRight.setPower(FRPower * limiter);
+            backLeft.setPower(BLPower * limiter);
+            backRight.setPower(BRPower * limiter);
+
+            return false;
+        };
+    }
+
+    public void driveBlocking(Gamepad gamepad, double limiter) {
+        TeamUtils.runOnce(drive(gamepad, limiter));
     }
 
     public double getFLMotorPower() {
@@ -81,4 +93,5 @@ public class MecanumDrivetrain {
     public int getBRMotorPosition() {
         return backRight.getCurrentPosition();
     }
+
 }
