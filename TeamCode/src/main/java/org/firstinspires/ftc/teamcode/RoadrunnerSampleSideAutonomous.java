@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.deprecated;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -12,9 +12,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.HorizontalClaw;
-import org.firstinspires.ftc.teamcode.VerticalClaw;
-import org.firstinspires.ftc.teamcode.VerticalExtension;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 // IN PROGRESS

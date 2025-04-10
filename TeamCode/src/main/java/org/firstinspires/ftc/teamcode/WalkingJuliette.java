@@ -1,10 +1,15 @@
-package org.firstinspires.ftc.teamcode.deprecated;
+package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.MecanumDrivetrain;
 
 @TeleOp(name = "Walking Juliette")
 @Deprecated
@@ -35,9 +40,9 @@ public class WalkingJuliette extends LinearOpMode {
         while (opModeIsActive()) {
             if (opModeIsActive()) {
                 // Drivetrain controls
-                if (gamepad1.right_bumper) drivetrain.driveBlocking(gamepad1, 0.8); // Standard - 0.84
-                else if (gamepad1.left_bumper) drivetrain.driveBlocking(gamepad1, 0.4); // Standard - 0.4
-                else drivetrain.driveBlocking(gamepad1, 0.6);
+                if (gamepad1.right_bumper) drivetrain.drive(0.8, gamepad1); // Standard - 0.84
+                else if (gamepad1.left_bumper) drivetrain.drive(0.4, gamepad1); // Standard - 0.4
+                else drivetrain.drive(0.6, gamepad1);
                 // Set normal speed to 0.5 at beginning of new season - for practice
 
 //                // Pickup

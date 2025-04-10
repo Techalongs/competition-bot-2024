@@ -41,14 +41,6 @@ public class VerticalClaw {
         hinge = hardwareMap.get(Servo.class, "verticalClawHinge");
     }
 
-    public void openBlocking() {
-        claw.setPosition(Position.OPEN.pos);
-    }
-
-    public void closeBlocking() {
-        claw.setPosition(Position.CLOSE.pos);
-    }
-
     public Action open() {
         return telemetryPacket -> {
             claw.setPosition(Position.OPEN.pos);

@@ -55,14 +55,6 @@ public class HorizontalClaw {
         claw.setDirection(Servo.Direction.REVERSE);
     }
 
-    public void openBlocking() {
-        claw.setPosition(Position.OPEN.pos);
-    }
-
-    public void closeBlocking() {
-        claw.setPosition(Position.CLOSE.pos);
-    }
-
     public Action open() {
         return telemetryPacket -> {
             claw.setPosition(Position.OPEN.pos);
