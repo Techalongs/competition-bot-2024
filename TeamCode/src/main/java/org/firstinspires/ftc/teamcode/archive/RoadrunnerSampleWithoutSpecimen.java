@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.HorizontalClaw;
+import org.firstinspires.ftc.teamcode.Positions;
 import org.firstinspires.ftc.teamcode.VerticalClaw;
 import org.firstinspires.ftc.teamcode.VerticalExtension;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -33,9 +34,9 @@ public class RoadrunnerSampleWithoutSpecimen extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                         horizontalClaw.open(),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         verticalClaw.close()
                 )
         );
@@ -68,30 +69,30 @@ public class RoadrunnerSampleWithoutSpecimen extends LinearOpMode {
                     new SequentialAction(
                             new ParallelAction(
                                     trajs[0].build(),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                                    extension.moveTo(VerticalExtension.Position.TOP)
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
+                                    extension.moveTo(Positions.VerticalExtPosition.TOP)
                             ),
-                            verticalClaw.hingeTo(VerticalClaw.HingePosition.UP),
+                            verticalClaw.hingeTo(Positions.VerticalHingePosition.UP),
                             new SleepAction(0.25),
                             verticalClaw.open(),
                             new SleepAction(0.75),
                             verticalClaw.close(),
                             new SleepAction(0.25),
-                            verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN),
+                            verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN),
                             new SleepAction(0.25),
                             new ParallelAction(
                                     trajs[1].build(),
-                                    extension.moveTo(VerticalExtension.Position.BOTTOM)
+                                    extension.moveTo(Positions.VerticalExtPosition.BOTTOM)
                                     // horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN)
                             ),
-                            horizontalClaw.wristTo(HorizontalClaw.WristPosition.MID),
+                            horizontalClaw.wristTo(Positions.HorizontalWristPosition.MID),
                             new SleepAction(0.25),
                             horizontalClaw.close(),
                             new ParallelAction(
                                     trajs[1].build(),
-                                    extension.moveTo(VerticalExtension.Position.PARK)
+                                    extension.moveTo(Positions.VerticalExtPosition.PARK)
                             ),
-                            verticalClaw.hingeTo(VerticalClaw.HingePosition.UP),
+                            verticalClaw.hingeTo(Positions.VerticalHingePosition.UP),
                             sleepAction(10000)
                     )
             );

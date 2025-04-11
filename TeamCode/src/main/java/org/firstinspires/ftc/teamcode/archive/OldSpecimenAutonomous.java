@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.HorizontalClaw;
+import org.firstinspires.ftc.teamcode.Positions;
 import org.firstinspires.ftc.teamcode.VerticalClaw;
 import org.firstinspires.ftc.teamcode.VerticalExtension;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -27,12 +28,12 @@ public class OldSpecimenAutonomous extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                         horizontalClaw.open(),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         verticalClaw.close(),
                         sleepAction(1000),
-                        verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN)
+                        verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN)
                 )
         );
 
@@ -105,27 +106,27 @@ public class OldSpecimenAutonomous extends LinearOpMode {
                     new SequentialAction(
                             new ParallelAction(
                                     trajs[i * 3].build(),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                                    extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
+                                    extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1)
                             ),
                             sleepAction(250),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_2),
                             verticalClaw.open(),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_1),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1),
                             verticalClaw.close(),
                             new ParallelAction(
                                     trajs[i * 3 + 1].build(),
-                                    extension.moveTo(VerticalExtension.Position.BOTTOM),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN)
+                                    extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN)
                             ),
                             sleepAction(500),
                             verticalClaw.open(),
                             horizontalClaw.open(),
-                            horizontalClaw.hingeTo(HorizontalClaw.HingePosition.MID),
+                            horizontalClaw.hingeTo(Positions.HorizontalHingePosition.MID),
                             trajs[i * 3 + 2].build(),
                             horizontalClaw.close(),
                             sleepAction(500),
-                            horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                            horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                             verticalClaw.close(),
                             sleepAction(500),
                             horizontalClaw.open()
@@ -139,17 +140,17 @@ public class OldSpecimenAutonomous extends LinearOpMode {
                     new SequentialAction(
                             new ParallelAction(
                                     trajs[9 + i].build(),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                                    extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
+                                    extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1)
                             ),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_2),
                             verticalClaw.open(),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_1),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1),
                             verticalClaw.close(),
                             new ParallelAction(
                                     trajs[9 + i + 1].build(),
-                                    extension.moveTo(VerticalExtension.Position.BOTTOM),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN)
+                                    extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN)
                             )
                     )
             );
@@ -161,11 +162,11 @@ public class OldSpecimenAutonomous extends LinearOpMode {
                                 verticalClaw.open(),
                                 horizontalClaw.open(),
                                 sleepAction(250),
-                                horizontalClaw.hingeTo(HorizontalClaw.HingePosition.MID),
+                                horizontalClaw.hingeTo(Positions.HorizontalHingePosition.MID),
                                 sleepAction(250),
                                 horizontalClaw.close(),
                                 sleepAction(250),
-                                horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                                horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                                 verticalClaw.close(),
                                 sleepAction(500),
                                 horizontalClaw.open()

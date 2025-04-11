@@ -11,42 +11,6 @@ public class HorizontalClaw {
     private final Servo wrist;
     private final Servo hinge;
 
-    public enum Position {
-        OPEN(0.65),
-        LOOSE(0.85),
-        CLOSE(0.89);
-
-        private final double pos;
-
-        Position(double pos) {
-            this.pos = pos;
-        }
-    }
-
-    public enum WristPosition {
-        UP(0.87),
-        MID(0.73),
-        DOWN(0.47);
-
-        private final double pos;
-
-        WristPosition(double pos) {
-            this.pos = pos;
-        }
-    }
-
-    public enum HingePosition {
-        UP(0),
-        MID(0.39),
-        DOWN(1);
-
-        private final double pos;
-
-        HingePosition(double pos) {
-            this.pos = pos;
-        }
-    }
-
     public HorizontalClaw(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "horizontalClaw");
         wrist = hardwareMap.get(Servo.class, "horizontalWrist");
@@ -57,37 +21,37 @@ public class HorizontalClaw {
 
     public Action open() {
         return telemetryPacket -> {
-            claw.setPosition(Position.OPEN.pos);
+            claw.setPosition(Positions.HorizontalClawPosition.OPEN.pos);
             return false;
         };
     }
 
     public Action loosen() {
         return telemetryPacket -> {
-            claw.setPosition(Position.LOOSE.pos);
+            claw.setPosition(Positions.HorizontalClawPosition.LOOSE.pos);
             return false;
         };
     }
 
     public Action close() {
         return telemetryPacket -> {
-            claw.setPosition(Position.CLOSE.pos);
+            claw.setPosition(Positions.HorizontalClawPosition.CLOSE.pos);
             return false;
         };
     }
 
-    public Action wristTo(WristPosition pos) {
+    public Action wristTo(Positions.HorizontalWristPosition p) {
         return telemetryPacket -> {
-            wrist.setPosition(pos.pos);
+            wrist.setPosition(p.pos);
             return false;
         };
     }
 
-    public Action hingeTo(HingePosition pos) {
+    public Action hingeTo(Positions.HorizontalHingePosition p) {
         return telemetryPacket -> {
-            hinge.setPosition(pos.pos);
+            hinge.setPosition(p.pos);
 
-            if (pos == HingePosition.UP) {
+            if (p == Positions.HorizontalHingePosition.UP) {
                 Actions.runBlocking(
                         new SequentialAction(
                                 loosen(),

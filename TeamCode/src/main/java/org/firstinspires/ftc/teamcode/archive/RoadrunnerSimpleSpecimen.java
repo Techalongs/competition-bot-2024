@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Positions;
 import org.firstinspires.ftc.teamcode.VerticalClaw;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -24,7 +25,7 @@ public class RoadrunnerSimpleSpecimen extends LinearOpMode {
         VerticalClaw claw = new VerticalClaw(hardwareMap);
 
         Actions.runBlocking(new SequentialAction(
-                claw.hingeTo(VerticalClaw.HingePosition.UP),
+                claw.hingeTo(Positions.VerticalHingePosition.UP),
                 claw.close()
         ));
 

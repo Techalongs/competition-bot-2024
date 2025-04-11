@@ -47,9 +47,9 @@ public class SpecimenAuto extends OpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                         horizontalClaw.open(),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         verticalClaw.close()
                 )
         );
@@ -169,17 +169,17 @@ public class SpecimenAuto extends OpMode {
     private void autonomousPathUpdate() {
         Action scoreSpecimen =
                 new SequentialAction(
-                    verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
+                    verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
                     new SleepAction(0.3),
-                    extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
+                    extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_2),
                     new SleepAction(0.25),
                     verticalClaw.open(),
-                    extension.moveTo(VerticalExtension.Position.SPECIMEN_1),
+                    extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1),
                     verticalClaw.close(),
                     new ParallelAction(
-                            verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN),
-                            extension.moveTo(VerticalExtension.Position.BOTTOM),
-                            horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN)
+                            verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN),
+                            extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
+                            horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN)
                     )
                 );
 
@@ -188,15 +188,15 @@ public class SpecimenAuto extends OpMode {
                         horizontalClaw.close(),
                         verticalClaw.open(),
                         new SleepAction(0.25),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP)
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP)
                 );
 
         Action handoff =
                 new SequentialAction(
                         new SleepAction(1),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN),
                         new SleepAction(1),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         new SleepAction(0.5),
                         verticalClaw.close(),
                         new SleepAction(0.5),

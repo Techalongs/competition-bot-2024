@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.HorizontalClaw;
+import org.firstinspires.ftc.teamcode.Positions;
 import org.firstinspires.ftc.teamcode.VerticalClaw;
 import org.firstinspires.ftc.teamcode.VerticalExtension;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -29,9 +30,9 @@ public class RoadrunnerSpecimenAutonomous extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                         horizontalClaw.open(),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         verticalClaw.close()
                 )
         );
@@ -87,19 +88,19 @@ public class RoadrunnerSpecimenAutonomous extends LinearOpMode {
                     new SequentialAction(
                             new ParallelAction(
                                     trajs[0].build(),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                                    extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
+                                    extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1)
                             ),
                             new SleepAction(1),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_2),
                             verticalClaw.open(),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_1),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1),
                             verticalClaw.close(),
                             new ParallelAction(
                                     trajs[1].build(),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN),
-                                    extension.moveTo(VerticalExtension.Position.BOTTOM),
-                                    horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN)
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN),
+                                    extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
+                                    horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN)
                             ),
                             horizontalClaw.open(),
                             new SleepAction(0.25),
@@ -107,7 +108,7 @@ public class RoadrunnerSpecimenAutonomous extends LinearOpMode {
                             new SleepAction(0.5),
                             horizontalClaw.close(),
                             new SleepAction(0.5),
-                            horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                            horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
 //                            new ParallelAction(
 //                                    trajs[5].build(), // trajs[2] & trajs[3]
 //                                    new SequentialAction(
@@ -125,9 +126,9 @@ public class RoadrunnerSpecimenAutonomous extends LinearOpMode {
 //                                    )
 //                            ),
                             trajs[2].build(),
-                            horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
+                            horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN),
                             new SleepAction(0.75),
-                            horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                            horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                             new SleepAction(0.75),
                             verticalClaw.close(),
                             new SleepAction(0.75),
@@ -135,19 +136,19 @@ public class RoadrunnerSpecimenAutonomous extends LinearOpMode {
                             new SleepAction(0.25),
                             new ParallelAction(
                                     trajs[3].build(),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                                    extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
+                                    extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1)
                             ), // Comment to here
                             new SleepAction(0.5),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_2),
                             verticalClaw.open(),
-                            extension.moveTo(VerticalExtension.Position.SPECIMEN_1),
+                            extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1),
                             verticalClaw.close(),
                             new ParallelAction(
                                     trajs[6].build(),
-                                    verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN),
-                                    extension.moveTo(VerticalExtension.Position.BOTTOM),
-                                    horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
+                                    verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN),
+                                    extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
+                                    horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN),
                                     horizontalClaw.open()
                             )
                     )

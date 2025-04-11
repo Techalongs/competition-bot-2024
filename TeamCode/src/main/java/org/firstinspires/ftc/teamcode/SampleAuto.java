@@ -46,9 +46,9 @@ public class SampleAuto extends OpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                         horizontalClaw.open(),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         verticalClaw.close()
                 )
         );
@@ -186,40 +186,40 @@ public class SampleAuto extends OpMode {
     private void autonomousPathUpdate() {
         Action dropSample =
                 new SequentialAction(
-                        verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                        extension.moveTo(VerticalExtension.Position.TOP),
-                        verticalClaw.hingeTo(VerticalClaw.HingePosition.UP),
+                        verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
+                        extension.moveTo(Positions.VerticalExtPosition.TOP),
+                        verticalClaw.hingeTo(Positions.VerticalHingePosition.UP),
                         new SleepAction(0.5),
                         verticalClaw.open(),
                         new SleepAction(0.5),
                         verticalClaw.close(),
                         new SleepAction(0.25),
-                        verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN)
+                        verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN)
                 );
 
         Action readyForPickup =
                 new SequentialAction(
-                        extension.moveTo(VerticalExtension.Position.BOTTOM),
+                        extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
                         verticalClaw.open()
                 );
 
         Action pickup =
                 new SequentialAction(
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.MID),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.MID),
                         new SleepAction(0.25),
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN),
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.DOWN),
                         new SleepAction(0.75),
                         horizontalClaw.close(),
                         new SleepAction(0.5),
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP)
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP)
                 );
 
         Action handoff =
                 new SequentialAction(
                         new SleepAction(1),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN),
                         new SleepAction(0.75),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         new SleepAction(0.5),
                         verticalClaw.close(),
                         new SleepAction(0.5),
@@ -228,8 +228,8 @@ public class SampleAuto extends OpMode {
 
         Action park =
                 new SequentialAction(
-                        extension.moveTo(VerticalExtension.Position.BOTTOM),
-                        verticalClaw.hingeTo(VerticalClaw.HingePosition.PARK)
+                        extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
+                        verticalClaw.hingeTo(Positions.VerticalHingePosition.PARK)
                 );
 
         switch (pathState) {
