@@ -83,7 +83,7 @@ public class RoadrunnerSampleWithoutSpecimen extends LinearOpMode {
                             new ParallelAction(
                                     trajs[1].build(),
                                     extension.moveTo(Positions.VerticalExtPosition.BOTTOM)
-                                    // horizontalClaw.hingeTo(HorizontalClaw.HingePosition.DOWN)
+                                    // horizontalClaw.hingeTo(Positions.HorizontalHingPosition.DOWN)
                             ),
                             horizontalClaw.wristTo(Positions.HorizontalWristPosition.MID),
                             new SleepAction(0.25),

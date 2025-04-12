@@ -47,9 +47,9 @@ public class ThreeSpecimenAuto extends OpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        horizontalClaw.hingeTo(HorizontalClaw.HingePosition.UP),
+                        horizontalClaw.hingeTo(Positions.HorizontalHingePosition.UP),
                         horizontalClaw.open(),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         verticalClaw.close()
                 )
         );
@@ -174,23 +174,23 @@ public class ThreeSpecimenAuto extends OpMode {
     private void autonomousPathUpdate() {
         Action scorePrep =
                 new SequentialAction(
-                        verticalClaw.hingeTo(VerticalClaw.HingePosition.SPECIMEN),
-                        extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
+                        verticalClaw.hingeTo(Positions.VerticalHingePosition.SPECIMEN),
+                        extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1)
                 );
 
         Action scoreSpecimen =
                 new SequentialAction(
-                        extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
+                        extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_2),
                         new SleepAction(0.25),
                         verticalClaw.open(),
-                        extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
+                        extension.moveTo(Positions.VerticalExtPosition.SPECIMEN_1)
                 );
 
         Action postScore =
                 new ParallelAction(
-                        verticalClaw.hingeTo(VerticalClaw.HingePosition.DOWN),
-                        extension.moveTo(VerticalExtension.Position.BOTTOM),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN)
+                        verticalClaw.hingeTo(Positions.VerticalHingePosition.DOWN),
+                        extension.moveTo(Positions.VerticalExtPosition.BOTTOM),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN)
                 );
 
         Action pickupSpecimen =
@@ -198,15 +198,15 @@ public class ThreeSpecimenAuto extends OpMode {
                         horizontalClaw.close(),
                         verticalClaw.open(),
                         new SleepAction(0.25),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP)
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP)
                 );
 
         Action handoff =
                 new SequentialAction(
                         new SleepAction(1),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN),
                         new SleepAction(1),
-                        horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+                        horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
                         new SleepAction(0.5),
                         verticalClaw.close(),
                         new SleepAction(0.5),
