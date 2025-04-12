@@ -222,7 +222,9 @@ public class ThreeSpecimenAuto extends OpMode {
             case 1: // Shove samples into observation zone
                 telemetry.addData("Path Case 1", "PRE isBusy");
                 telemetry.update();
+                follower.update();
                 if (!follower.isBusy()) {
+                    follower.update();
                     telemetry.addData("Path Case 1", "POST isBusy");
                     telemetry.update();
                     Actions.runBlocking(scoreSpecimen);
