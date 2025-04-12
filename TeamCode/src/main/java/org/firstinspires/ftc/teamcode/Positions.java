@@ -2,9 +2,19 @@ package org.firstinspires.ftc.teamcode;
 
 public class Positions {
 
+    public enum HangExtPosition {
+        TOP(24300);
+
+        public final int ticks;
+
+        HangExtPosition(int ticks) {
+            this.ticks = ticks;
+        }
+    }
+
     public enum HorizontalExtPosition {
-        BOTTOM(-10),
-        TOP(-1500);
+        BOTTOM(100),
+        TOP(1500);
 
         public final int ticks;
 
