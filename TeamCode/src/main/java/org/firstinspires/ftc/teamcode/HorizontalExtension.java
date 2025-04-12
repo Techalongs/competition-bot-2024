@@ -10,17 +10,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class HorizontalExtension {
     private final DcMotor extension;
 
-    public enum Position {
-        BOTTOM(-10),
-        TOP(-1500);
-
-        private final int ticks;
-
-        Position(int ticks) {
-            this.ticks = ticks;
-        }
-    }
-
     public HorizontalExtension(HardwareMap hardwareMap) {
         extension = hardwareMap.get(DcMotor.class, "horizontalExtension");
 
@@ -29,14 +18,14 @@ public class HorizontalExtension {
         extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public Action moveTo(Position pos) {
+    public Action moveTo(Positions.HorizontalExtPosition p) {
         return new Action() {
             boolean init = false;
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (!init) {
-                    extension.setTargetPosition(pos.ticks);
+                    extension.setTargetPosition(p.ticks);
                     extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     init = true;
                 }

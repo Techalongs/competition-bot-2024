@@ -12,30 +12,6 @@ public class VerticalClaw {
     private final Servo claw;
     private final Servo hinge;
 
-    public enum Position {
-        OPEN(0.9),
-        CLOSE(0.43);
-
-        private final double pos;
-
-        Position(double pos) {
-            this.pos = pos;
-        }
-    }
-
-    public enum HingePosition {
-        UP(0.9),
-        SPECIMEN(0.35),
-        PARK(0.5),
-        DOWN(0.03);
-
-        private final double pos;
-
-        HingePosition(double pos) {
-            this.pos = pos;
-        }
-    }
-
     public VerticalClaw(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "verticalClaw");
         hinge = hardwareMap.get(Servo.class, "verticalClawHinge");
@@ -43,26 +19,26 @@ public class VerticalClaw {
 
     public Action open() {
         return telemetryPacket -> {
-            claw.setPosition(Position.OPEN.pos);
+            claw.setPosition(Positions.VerticalClawPosition.OPEN.pos);
             return false;
         };
     }
 
     public Action close() {
         return telemetryPacket -> {
-            claw.setPosition(Position.CLOSE.pos);
+            claw.setPosition(Positions.VerticalClawPosition.CLOSE.pos);
             return false;
         };
     }
 
-    public Action hingeTo(HingePosition pos) {
+    public Action hingeTo(Positions.VerticalHingePosition p) {
         return new Action() {
             int time = 0;
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 Actions.runBlocking(close());
                 if (time++ < 10000) return true;
-                hinge.setPosition(pos.pos);
+                hinge.setPosition(p.pos);
                 return false;
             }
         };
