@@ -112,9 +112,9 @@ public class RoadrunnerSpecimenAutonomous extends LinearOpMode {
 //                            new ParallelAction(
 //                                    trajs[5].build(), // trajs[2] & trajs[3]
 //                                    new SequentialAction(
-//                                            horizontalClaw.wristTo(HorizontalClaw.WristPosition.DOWN),
+//                                            horizontalClaw.wristTo(Positions.HorizontalWristPosition.DOWN),
 //                                            new SleepAction(0.75),
-//                                            horizontalClaw.wristTo(HorizontalClaw.WristPosition.UP),
+//                                            horizontalClaw.wristTo(Positions.HorizontalWristPosition.UP),
 //                                            new SleepAction(0.75),
 //                                            verticalClaw.close(),
 //                                            new SleepAction(0.75),
