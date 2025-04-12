@@ -56,6 +56,20 @@ public class TeamUtils {
     }
 
     /**
+     * Run an action while blocking in this thread. This is a copy of the Actions#runBlocking
+     * method but with the FTC Dashboard code taken out.
+     *
+     * @param a Action
+     */
+    public static void runBlocking(Action a) {
+        boolean b = true;
+        while (b && !Thread.currentThread().isInterrupted()) {
+            TelemetryPacket p = new TelemetryPacket();
+            b = a.run(p);
+        }
+    }
+
+    /**
      * Run an Action blocking and then sleep for a number of seconds.
      * Note: The sleep is a proper SleepAction.
      *
