@@ -19,8 +19,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
-@Autonomous(name = "4-Specimen Autonomous")
-public class SpecimenAuto extends OpMode {
+@Autonomous(name = "3-Specimen Autonomous")
+public class ThreeSpecimenAuto extends OpMode {
     private VerticalExtension extension;
     private VerticalClaw verticalClaw;
     private HorizontalClaw horizontalClaw;
@@ -116,27 +116,10 @@ public class SpecimenAuto extends OpMode {
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath(
-                        // Line 4
-                        new BezierCurve(
-                                new Point(30.000, 26.000, Point.CARTESIAN),
-                                new Point(68.000, 30.000, Point.CARTESIAN),
-                                new Point(58.000, 17.000, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(
-                        // Line 5
-                        new BezierLine(
-                                new Point(58.000, 17.000, Point.CARTESIAN),
-                                new Point(30.000, 17.000, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(
                         // Line 8
                         new BezierCurve(
-                                new Point(30.000, 17.000, Point.CARTESIAN),
-                                new Point(53.000, 17.000, Point.CARTESIAN),
+                                new Point(30.000, 26.000, Point.CARTESIAN),
+                                new Point(50.000, 27.000, Point.CARTESIAN),
                                 new Point(8.000, 28.000, Point.CARTESIAN)
                         )
                 )
@@ -181,28 +164,6 @@ public class SpecimenAuto extends OpMode {
                         // Line 10
                         new BezierLine(
                                 new Point(41.000, 74.000, Point.CARTESIAN),
-                                new Point(8.000, 28.000, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-                .build();
-
-        paths[6] = follower.pathBuilder()
-                .addPath(
-                        // Line 9
-                        new BezierLine(
-                                new Point(8.000, 28.000, Point.CARTESIAN),
-                                new Point(41.000, 73.000, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-                .build();
-
-        paths[7] = follower.pathBuilder()
-                .addPath(
-                        // Line 10
-                        new BezierLine(
-                                new Point(41.000, 73.000, Point.CARTESIAN),
                                 new Point(15.000, 30.000, Point.CARTESIAN)
                         )
                 )
@@ -219,10 +180,10 @@ public class SpecimenAuto extends OpMode {
 
         Action scoreSpecimen =
                 new SequentialAction(
-                    extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
-                    new SleepAction(0.25),
-                    verticalClaw.open(),
-                    extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
+                        extension.moveTo(VerticalExtension.Position.SPECIMEN_2),
+                        new SleepAction(0.25),
+                        verticalClaw.open(),
+                        extension.moveTo(VerticalExtension.Position.SPECIMEN_1)
                 );
 
         Action postScore =
@@ -268,7 +229,6 @@ public class SpecimenAuto extends OpMode {
                 }
             case 2: // Goes to chamber
             case 4:
-            case 6:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(pickupSpecimen);
                     follower.followPath(paths[pathState]);
@@ -279,12 +239,11 @@ public class SpecimenAuto extends OpMode {
                 }
             case 3: // Goes back to collect next specimen
             case 5:
-            case 7:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(scoreSpecimen);
                     follower.followPath(paths[pathState]);
                     Actions.runBlocking(postScore);
-                    setPathState((pathState != 7) ? pathState + 1 : -1);
+                    setPathState((pathState != 5) ? pathState + 1 : -1);
                     break;
                 }
         }
