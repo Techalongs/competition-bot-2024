@@ -103,39 +103,39 @@ public class SpecimenAuto extends OpMode {
                                 new Point(41.000, 72.000, Point.CARTESIAN),
                                 new Point(1.000, 23.000, Point.CARTESIAN),
                                 new Point(80.000, 42.000, Point.CARTESIAN),
-                                new Point(58.000, 25.000, Point.CARTESIAN)
+                                new Point(58.000, 26.000, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath(
                         // Line 3
                         new BezierLine(
-                                new Point(58.000, 25.000, Point.CARTESIAN),
-                                new Point(30.000, 25.000, Point.CARTESIAN)
+                                new Point(58.000, 26.000, Point.CARTESIAN),
+                                new Point(30.000, 26.000, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath(
                         // Line 4
                         new BezierCurve(
-                                new Point(30.000, 25.000, Point.CARTESIAN),
+                                new Point(30.000, 26.000, Point.CARTESIAN),
                                 new Point(68.000, 30.000, Point.CARTESIAN),
-                                new Point(58.000, 12.000, Point.CARTESIAN)
+                                new Point(58.000, 15.000, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath(
                         // Line 5
                         new BezierLine(
-                                new Point(58.000, 12.000, Point.CARTESIAN),
-                                new Point(30.000, 12.000, Point.CARTESIAN)
+                                new Point(58.000, 15.000, Point.CARTESIAN),
+                                new Point(30.000, 15.000, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath(
                         // Line 8
                         new BezierCurve(
-                                new Point(30.000, 12.000, Point.CARTESIAN),
+                                new Point(30.000, 15.000, Point.CARTESIAN),
                                 new Point(45.000, 17.000, Point.CARTESIAN),
                                 new Point(8.000, 28.000, Point.CARTESIAN)
                         )
@@ -159,7 +159,7 @@ public class SpecimenAuto extends OpMode {
                         // Line 10
                         new BezierLine(
                                 new Point(41.000, 70.000, Point.CARTESIAN),
-                                new Point(8.000, 25.000, Point.CARTESIAN)
+                                new Point(8.000, 28.000, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
