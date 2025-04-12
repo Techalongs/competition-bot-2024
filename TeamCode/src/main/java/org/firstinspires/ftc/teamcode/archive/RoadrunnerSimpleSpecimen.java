@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.archive;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Positions;
+import org.firstinspires.ftc.teamcode.VerticalClaw;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 // MUST TEST - New Bot
@@ -23,7 +25,7 @@ public class RoadrunnerSimpleSpecimen extends LinearOpMode {
         VerticalClaw claw = new VerticalClaw(hardwareMap);
 
         Actions.runBlocking(new SequentialAction(
-                claw.hingeTo(VerticalClaw.HingePosition.UP),
+                claw.hingeTo(Positions.VerticalHingePosition.UP),
                 claw.close()
         ));
 

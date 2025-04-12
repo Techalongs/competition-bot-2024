@@ -13,20 +13,6 @@ public class VerticalExtension {
     private final DcMotor extension;
     private final DigitalChannel bottomArmLimit;
 
-    public enum Position {
-        BOTTOM(-10),
-        PARK(-190),
-        SPECIMEN_1(-150),
-        SPECIMEN_2(-800),
-        TOP(-2600);
-
-        private final int ticks;
-
-        Position(int ticks) {
-            this.ticks = ticks;
-        }
-    }
-
     public VerticalExtension(HardwareMap hardwareMap) {
         extension = hardwareMap.get(DcMotor.class, "verticalArm");
         bottomArmLimit = hardwareMap.get(DigitalChannel.class, "bottomArmLimit");
@@ -37,7 +23,7 @@ public class VerticalExtension {
         extension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public Action moveTo(Position pos) {
+    public Action moveTo(Positions.VerticalExtPosition pos) {
         return new Action() {
             boolean init = false;
 
@@ -49,7 +35,7 @@ public class VerticalExtension {
                     init = true;
                 }
 
-                if (pos == Position.BOTTOM) {
+                if (pos == Positions.VerticalExtPosition.BOTTOM) {
                     if (bottomArmLimit.getState()) {
                         extension.setPower(1);
                         return true;
