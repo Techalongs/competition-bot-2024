@@ -38,6 +38,7 @@ dependencies {
     implementation "com.acmerobotics.roadrunner:actions:1.0.0"
     implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
     // SolversLib (FTCLib) with Pedro Pathing
+    implementation "org.ftclib.ftclib:core:2.1.1"
     implementation "org.solverslib:core:0.2.5"
     implementation "org.solverslib:pedroPathing:0.2.5"
 }
