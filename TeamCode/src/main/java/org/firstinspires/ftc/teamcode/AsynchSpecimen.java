@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -19,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
+@SuppressWarnings("unused")
 @Autonomous(name = "Asynch Specimen")
 public class AsynchSpecimen extends OpMode {
     private VerticalExtension extension;
@@ -29,6 +31,7 @@ public class AsynchSpecimen extends OpMode {
     private Timer pathTimer, opmodeTimer;
     private PathChain[] paths;
     private int pathState;
+    private Action currentAction;
 
     private Action scoreSpecimen;
 
@@ -73,6 +76,8 @@ public class AsynchSpecimen extends OpMode {
     public void loop() {
         follower.update();
         autonomousPathUpdate();
+
+        runCurrentAction();
 
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
@@ -215,49 +220,46 @@ public class AsynchSpecimen extends OpMode {
     private void autonomousPathUpdate() {
         switch (pathState) {
             case 0: // To chamber
-                Actions.runBlocking(pathAction(paths[0]));
+                currentAction = pathAction(paths[0]);
                 setPathState(1);
                 break;
             case 1: // Shove samples into observation zone
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(
+                if (isLastActionCompleted()) {
+                    currentAction =
                             new SequentialAction(
                                     scoreSpecimen,
                                     pathAction(paths[1])
-                            )
-                    );
+                            );
                     setPathState(2);
-                    break;
                 }
+                break;
             case 2: // Goes to chamber
             case 4:
             case 6:
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(
+                if (isLastActionCompleted()) {
+                    currentAction =
                             new SequentialAction(
                                     pickupSpecimen,
                                     new ParallelAction(
                                             pathAction(paths[2]),
                                             handoff
                                     )
-                            )
-                    );
+                            );
                     setPathState(pathState + 1);
-                    break;
                 }
+                break;
             case 3: // Goes back to collect next specimen
             case 5:
             case 7:
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(
+                if (isLastActionCompleted()) {
+                    currentAction =
                             new SequentialAction(
                                     scoreSpecimen,
                                     pathAction(paths[3])
-                            )
-                    );
+                            );
                     setPathState((pathState != 7) ? pathState + 1 : -1);
-                    break;
                 }
+                break;
         }
     }
 
@@ -266,5 +268,19 @@ public class AsynchSpecimen extends OpMode {
             follower.followPath(path);
             return false;
         };
+    }
+
+    private boolean isLastActionCompleted() {
+        return (!follower.isBusy()) && (currentAction == null);
+    }
+
+    private void runCurrentAction() {
+        if (currentAction == null) return;
+
+        TelemetryPacket p = new TelemetryPacket();
+        if (!currentAction.run(p)) {
+            // The current action is done. Set it to null
+            currentAction = null;
+        }
     }
 }
