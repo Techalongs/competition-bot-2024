@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -38,6 +39,23 @@ public class VerticalClaw {
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 Actions.runBlocking(close());
                 if (time++ < 10000) return true;
+                hinge.setPosition(p.pos);
+                return false;
+            }
+        };
+    }
+
+    public Action asynchHingeTo(Positions.VerticalHingePosition p) {
+        return new Action() {
+            Timer timer;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (timer == null) timer = new Timer();
+
+                claw.setPosition(Positions.VerticalClawPosition.CLOSE.pos);
+                if (timer.getElapsedTimeSeconds() < 0.5) return true;
+
                 hinge.setPosition(p.pos);
                 return false;
             }

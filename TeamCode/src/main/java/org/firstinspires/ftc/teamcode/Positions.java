@@ -87,7 +87,7 @@ public class Positions {
     public enum VerticalHingePosition {
         UP(0.9),
         SPECIMEN(0.35),
-        PARK(0.5),
+        PARK(0.45),
         DOWN(0.03);
 
         public final double pos;

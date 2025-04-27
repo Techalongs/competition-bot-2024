@@ -72,7 +72,7 @@ public class Robot extends MecanumDrivetrain {
     }
 
     public void moveExtension(double power) {
-        if ((!isBottomExtensionLimitPressed() || power > 0) && (extension.getCurrentPosition() < 1500 || power < 0))
+        if ((!isBottomExtensionLimitPressed() || power > 0) && (extension.getCurrentPosition() < 1350 || power < 0))
             extension.setPower(power);
         else extension.setPower(0);
 

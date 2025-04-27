@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -52,12 +50,8 @@ public class HorizontalClaw {
             hinge.setPosition(p.pos);
 
             if (p == Positions.HorizontalHingePosition.UP) {
-                Actions.runBlocking(
-                        new SequentialAction(
-                                loosen(),
-                                close()
-                        )
-                );
+                claw.setPosition(Positions.HorizontalClawPosition.LOOSE.pos);
+                claw.setPosition(Positions.HorizontalClawPosition.CLOSE.pos);
             }
 
             return false;
